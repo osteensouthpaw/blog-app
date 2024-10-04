@@ -15,7 +15,7 @@ const NavBar = () => {
   ];
 
   return (
-    <nav className="flex justify-between h-14 px-5 items-center border-b mb-20">
+    <nav className="flex justify-between h-14 px-5 items-center border-b">
       <Link href="/">
         <BiBook size={35} />
       </Link>
