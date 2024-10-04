@@ -2,37 +2,55 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { BiBook } from "react-icons/bi";
+import { Box, Button, Container, Flex } from "@radix-ui/themes";
+import { useSession } from "next-auth/react";
 
 const NavBar = () => {
   const pathname = usePathname();
-  console.log(pathname);
+  const { status, data: session } = useSession();
 
   const links = [
     { label: "Blogs", href: "/blogs" },
     { label: "Write", href: "/blogs/new" },
-    { label: "sign Up", href: "/auth/register" },
-    { label: "Sign In", href: "/auth/signin" },
   ];
 
   return (
-    <nav className="flex justify-between h-14 px-5 items-center border-b">
-      <Link href="/">
-        <BiBook size={35} />
-      </Link>
-      <ul className="flex gap-6">
-        {links.map((link) => (
-          <li key={link.href}>
-            <Link
-              href={link.href}
-              className={` ${
-                pathname === link.href ? "text-zinc-900" : "text-zinc-500"
-              }  hover:text-zinc-900 transition-colors`}
-            >
-              {link.label}
-            </Link>
-          </li>
-        ))}
-      </ul>
+    <nav className="p-3 border-b">
+      <Container>
+        <Flex justify="between" align="center">
+          <Link href="/">
+            <BiBook size={35} />
+          </Link>
+          <ul className="flex gap-6">
+            {links.map((link) => (
+              <li key={link.href}>
+                <Link
+                  href={link.href}
+                  className={` ${
+                    pathname === link.href ? "text-zinc-900" : "text-zinc-500"
+                  }  hover:text-zinc-900 transition-colors`}
+                >
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <Box>
+            {status === "authenticated" ? (
+              <Link href={"/api/auth/signout"}>Sign Out</Link>
+            ) : (
+              <Flex gap="4">
+                <Button variant="outline">
+                  <Link href={"/auth/signin"}>Sign In</Link>
+                </Button>
+                <Button>
+                  <Link href="/auth/register">Sign Up</Link>
+                </Button>
+              </Flex>
+            )}
+          </Box>
+        </Flex>
+      </Container>
     </nav>
   );
 };
