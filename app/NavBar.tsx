@@ -5,23 +5,13 @@ import { BiBook } from "react-icons/bi";
 
 const NavBar = () => {
   const pathname = usePathname();
+  console.log(pathname);
 
   const links = [
-    {
-      label: "Write",
-      href: "/new",
-      className: "text-zinc-500 hover:text-zinc-900 transition-colors",
-    },
-    {
-      label: "sign Up",
-      href: "/",
-      className: "text-zinc-500 hover:text-zinc-900 transition-colors",
-    },
-    {
-      label: "Sign In",
-      href: "/",
-      className: "text-zinc-500 hover:text-zinc-900 transition-colors",
-    },
+    { label: "Blogs", href: "/blogs" },
+    { label: "Write", href: "/blogs/new" },
+    { label: "sign Up", href: "/sign-up" },
+    { label: "Sign In", href: "/sign-in" },
   ];
 
   return (
@@ -31,8 +21,13 @@ const NavBar = () => {
       </Link>
       <ul className="flex gap-6">
         {links.map((link) => (
-          <li>
-            <Link href={link.href} className={link.className}>
+          <li key={link.href}>
+            <Link
+              href={link.href}
+              className={` ${
+                pathname === link.href ? "text-zinc-900" : "text-zinc-500"
+              }  hover:text-zinc-900 transition-colors`}
+            >
               {link.label}
             </Link>
           </li>
