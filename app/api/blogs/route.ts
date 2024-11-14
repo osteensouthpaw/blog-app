@@ -1,7 +1,6 @@
 import prisma from "@/prisma/client";
 import { Blog } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
-import { json } from "stream/consumers";
 import { z } from "zod";
 
 const createBlogSchema = z.object({
