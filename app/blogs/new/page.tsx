@@ -1,6 +1,6 @@
 "use client";
 import { createBlogSchema } from "@/app/validationSchemas";
-import { Button, Callout, Text, TextField } from "@radix-ui/themes";
+import { Button, Callout, Spinner, Text, TextField } from "@radix-ui/themes";
 import axios from "axios";
 import "easymde/dist/easymde.min.css";
 import { useRouter } from "next/navigation";
@@ -19,7 +19,7 @@ const NewBlogPage = () => {
     register,
     handleSubmit,
     control,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<BlogForm>({
     resolver: zodResolver(createBlogSchema),
   });
@@ -54,7 +54,15 @@ const NewBlogPage = () => {
           )}
         />
         <ErrorMessage>{errors.content?.message}</ErrorMessage>
-        <Button radius="full">Publish</Button>
+        <Button
+          disabled={isSubmitting}
+          type="submit"
+          radius="full"
+          className="hover:cursor-pointer"
+        >
+          {isSubmitting && <Spinner />}
+          Publish
+        </Button>
       </form>
     </div>
   );
