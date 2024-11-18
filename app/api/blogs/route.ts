@@ -1,17 +1,7 @@
+import { createBlogSchema } from "@/app/validationSchemas";
 import prisma from "@/prisma/client";
 import { Blog } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
-import { z } from "zod";
-
-const createBlogSchema = z.object({
-  title: z
-    .string()
-    .max(255)
-    .min(3, { message: "title cannot be less that 3 characters" }),
-  content: z
-    .string()
-    .min(3, { message: "content cannot be less that 3 characters" }),
-});
 
 export async function POST(request: NextRequest) {
   const body: Blog = await request.json();

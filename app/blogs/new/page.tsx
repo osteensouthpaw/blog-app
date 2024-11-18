@@ -1,20 +1,27 @@
 "use client";
-import { Button, Callout, TextField } from "@radix-ui/themes";
+import { createBlogSchema } from "@/app/validationSchemas";
+import { Button, Callout, Text, TextField } from "@radix-ui/themes";
 import axios from "axios";
 import "easymde/dist/easymde.min.css";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import SimpleMDE from "react-simplemde-editor";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-interface BlogForm {
-  title: string;
-  content: string;
-}
+type BlogForm = z.infer<typeof createBlogSchema>;
 
 const NewBlogPage = () => {
   const router = useRouter();
-  const { register, handleSubmit, control } = useForm<BlogForm>();
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm<BlogForm>({
+    resolver: zodResolver(createBlogSchema),
+  });
   const [error, setError] = useState("");
 
   return (
@@ -37,6 +44,11 @@ const NewBlogPage = () => {
         })}
       >
         <TextField.Root placeholder="Title" {...register("title")} />
+        {errors.title && (
+          <Text size="2" color="red">
+            {errors.title.message}
+          </Text>
+        )}
         <Controller
           name="content"
           control={control}
@@ -44,6 +56,11 @@ const NewBlogPage = () => {
             <SimpleMDE placeholder="Content here" {...field} />
           )}
         />
+        {errors.content && (
+          <Text size="2" color="red" className="block">
+            {errors.content.message}
+          </Text>
+        )}
         <Button radius="full">Publish</Button>
       </form>
     </div>
