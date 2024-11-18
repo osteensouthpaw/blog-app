@@ -25,6 +25,16 @@ const NewBlogPage = () => {
   });
   const [error, setError] = useState("");
 
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      await axios.post("/api/blogs", data);
+      router.push("/blogs");
+    } catch (error) {
+      console.log(error);
+      setError("an error occured please try again");
+    }
+  });
+
   return (
     <div className="max-w-xl">
       {error && (
@@ -32,18 +42,7 @@ const NewBlogPage = () => {
           {error}
         </Callout.Root>
       )}
-      <form
-        className=" space-y-5"
-        onSubmit={handleSubmit(async (data) => {
-          try {
-            await axios.post("/api/blogs", data);
-            router.push("/blogs");
-          } catch (error) {
-            console.log(error);
-            setError("an error occured please try again");
-          }
-        })}
-      >
+      <form className=" space-y-5" onSubmit={onSubmit}>
         <TextField.Root placeholder="Title" {...register("title")} />
         <ErrorMessage>{errors.title?.message}</ErrorMessage>
         <Controller
