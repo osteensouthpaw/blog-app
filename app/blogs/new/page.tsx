@@ -9,6 +9,7 @@ import { Controller, useForm } from "react-hook-form";
 import SimpleMDE from "react-simplemde-editor";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import ErrorMessage from "../../components/ErrorMessage";
 
 type BlogForm = z.infer<typeof createBlogSchema>;
 
@@ -44,11 +45,7 @@ const NewBlogPage = () => {
         })}
       >
         <TextField.Root placeholder="Title" {...register("title")} />
-        {errors.title && (
-          <Text size="2" color="red">
-            {errors.title.message}
-          </Text>
-        )}
+        <ErrorMessage>{errors.title?.message}</ErrorMessage>
         <Controller
           name="content"
           control={control}
@@ -56,11 +53,7 @@ const NewBlogPage = () => {
             <SimpleMDE placeholder="Content here" {...field} />
           )}
         />
-        {errors.content && (
-          <Text size="2" color="red" className="block">
-            {errors.content.message}
-          </Text>
-        )}
+        <ErrorMessage>{errors.content?.message}</ErrorMessage>
         <Button radius="full">Publish</Button>
       </form>
     </div>
