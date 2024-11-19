@@ -1,7 +1,48 @@
-import React from "react";
+import prisma from "@/prisma/client";
+import { Box, Flex, Heading, Link, Text } from "@radix-ui/themes";
+import NextLink from "next/link";
+import { RxDoubleArrowRight } from "react-icons/rx";
 
-const BlogsPage = () => {
-  return <div>BlogsPage</div>;
+const BlogsPage = async () => {
+  const blogs = await prisma.blog.findMany();
+
+  return (
+    <Box mt="9" className="space-y-6">
+      <Heading className="text-zinc-800 font-bold" size="8">
+        I Love Writing blogs About Techonology
+      </Heading>
+      <Text as="p" className="text-zinc-500 !mb-20">
+        All of my long-form thoughts on programming, content creation,and more,
+        collected in chronological order.
+      </Text>
+      <Flex direction="column" gap="6" className="md:border-l">
+        {blogs.map((blog) => (
+          <Flex key={blog.id} className="flex-col md:flex-row gap-2">
+            <Text
+              as="p"
+              className="text-zinc-400 text-xs md:text-sm md:w-1/6 pl-3 border-l-4 md:border-none"
+            >
+              {blog.createdAt.toDateString()}
+            </Text>
+            <Flex flexGrow="1" gap="4" direction="column">
+              <Heading as="h3" size="4" className="font-bold">
+                {blog.title}
+              </Heading>
+              <Text as="p" className="text-zinc-500">
+                {blog.content}
+              </Text>
+              <NextLink legacyBehavior href={"/"}>
+                <Link size="2">
+                  Read article
+                  <RxDoubleArrowRight size={12} className="inline-flex m-1" />
+                </Link>
+              </NextLink>
+            </Flex>
+          </Flex>
+        ))}
+      </Flex>
+    </Box>
+  );
 };
 
 export default BlogsPage;
