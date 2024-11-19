@@ -1,5 +1,5 @@
 import prisma from "@/prisma/client";
-import { Box, Flex, Heading, Link, Text, Card } from "@radix-ui/themes";
+import { Box, Flex, Heading, Link, Text } from "@radix-ui/themes";
 import NextLink from "next/link";
 import { RxDoubleArrowRight } from "react-icons/rx";
 
@@ -49,5 +49,7 @@ const BlogsPage = async () => {
     </Box>
   );
 };
+
+export const dynamic = "force-dynamic";
 
 export default BlogsPage;

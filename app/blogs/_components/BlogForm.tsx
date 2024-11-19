@@ -31,6 +31,7 @@ const BlogForm = ({ blog }: { blog?: Blog }) => {
       if (blog) await axios.patch(`/api/blogs/${blog.id}`, data);
       else await axios.post("/api/blogs", data);
       router.push("/blogs");
+      router.refresh();
     } catch (error) {
       console.log(error);
       setError("an error occured please try again");
