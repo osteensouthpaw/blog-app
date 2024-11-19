@@ -7,7 +7,7 @@ const BlogsPage = async () => {
   const blogs = await prisma.blog.findMany();
 
   return (
-    <Box mt="9" className="space-y-6">
+    <Box className="space-y-6">
       <Heading className="text-zinc-800 font-bold" size="8">
         I Love Writing blogs About Techonology
       </Heading>
@@ -31,7 +31,7 @@ const BlogsPage = async () => {
               <Text as="p" className="text-zinc-500">
                 {blog.content}
               </Text>
-              <NextLink legacyBehavior href={"/"}>
+              <NextLink legacyBehavior href={`/blogs/${blog.id}`}>
                 <Link size="2">
                   Read article
                   <RxDoubleArrowRight size={12} className="inline-flex m-1" />
