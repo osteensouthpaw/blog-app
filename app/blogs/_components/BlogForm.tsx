@@ -28,7 +28,8 @@ const BlogForm = ({ blog }: { blog?: Blog }) => {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await axios.post("/api/blogs", data);
+      if (blog) await axios.patch(`/api/blogs/${blog.id}`, data);
+      else await axios.post("/api/blogs", data);
       router.push("/blogs");
     } catch (error) {
       console.log(error);
@@ -65,8 +66,7 @@ const BlogForm = ({ blog }: { blog?: Blog }) => {
           radius="full"
           className="hover:cursor-pointer"
         >
-          {isSubmitting && <Spinner />}
-          Publish
+          {isSubmitting && <Spinner />} {blog ? "Update" : "Publish"}
         </Button>
       </form>
     </div>
