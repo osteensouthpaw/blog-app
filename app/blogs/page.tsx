@@ -24,12 +24,12 @@ const BlogsPage = async () => {
             >
               {blog.createdAt.toDateString()}
             </Text>
-            <NextLink href={`/blogs/${blog.id}`}>
+            <NextLink href={`/blogs/${blog.id}`} legacyBehavior>
               <Flex
                 flexGrow="1"
                 gap="4"
                 direction="column"
-                className="hover:bg-zinc-50 transition-colors rounded-lg p-4"
+                className="hover:bg-zinc-50 transition-colors rounded-lg p-4 cursor-pointer"
               >
                 <Heading as="h3" size="4" className="font-bold">
                   {blog.title}
@@ -37,12 +37,10 @@ const BlogsPage = async () => {
                 <Text as="p" className="text-zinc-500">
                   {blog.content.split(" ").slice(0, 60).join(" ").concat("...")}
                 </Text>
-                <NextLink legacyBehavior href={`/blogs/${blog.id}`}>
-                  <Link size="2">
-                    Read article
-                    <RxDoubleArrowRight size={12} className="inline-flex m-1" />
-                  </Link>
-                </NextLink>
+                <Link size="2">
+                  Read article
+                  <RxDoubleArrowRight size={12} className="inline-flex m-1" />
+                </Link>
               </Flex>
             </NextLink>
           </Flex>
