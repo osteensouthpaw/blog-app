@@ -18,7 +18,7 @@ const BlogDetailPage = async ({ params }: Props) => {
 
   return (
     <Box>
-      <Text className="text- text-zinc-400 border-l-4 pl-3">
+      <Text className="text-zinc-400 border-l-4 pl-3">
         {blog.createdAt.toDateString()}
       </Text>
       <Box>
