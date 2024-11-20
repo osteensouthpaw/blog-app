@@ -33,3 +33,24 @@ export async function PATCH(
 
   return NextResponse.json(updatedBlog);
 }
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  const blog = await prisma.blog.findUnique({
+    where: { id: parseInt(params.id) },
+  });
+
+  if (!blog)
+    return NextResponse.json(
+      { error: "This blog does not exist" },
+      { status: 404 }
+    );
+
+  await prisma.blog.delete({
+    where: { id: blog.id },
+  });
+
+  return NextResponse.json({});
+}
