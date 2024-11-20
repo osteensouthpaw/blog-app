@@ -1,9 +1,18 @@
 import prisma from "@/prisma/client";
-import { Box, Button, Flex, Heading, Text } from "@radix-ui/themes";
+import {
+  AlertDialog,
+  Box,
+  Button,
+  Dialog,
+  Flex,
+  Heading,
+  Text,
+} from "@radix-ui/themes";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BiTrash } from "react-icons/bi";
 import { RxPencil2 } from "react-icons/rx";
+import DeleteBlogButton from "./DeleteBlogButton";
 
 interface Props {
   params: { id: string };
@@ -29,9 +38,7 @@ const BlogDetailPage = async ({ params }: Props) => {
               <RxPencil2 size={15} />
             </Link>
           </Button>
-          <Button color="red" variant="soft">
-            <BiTrash size={15} />
-          </Button>
+          <DeleteBlogButton issueId={blog.id} />
         </Flex>
         <Text as="p" className="text-zinc-600">
           {blog.content}
