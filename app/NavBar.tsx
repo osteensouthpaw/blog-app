@@ -12,7 +12,7 @@ const NavBar = () => {
     { label: "Blogs", href: "/blogs" },
     { label: "Write", href: "/blogs/new" },
     { label: "sign Up", href: "/sign-up" },
-    { label: "Sign In", href: "/sign-in" },
+    { label: "Sign In", href: "/api/auth/signin" },
   ];
 
   return (
