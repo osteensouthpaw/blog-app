@@ -1,5 +1,5 @@
 "use client";
-import { AlertDialog, Button, Flex } from "@radix-ui/themes";
+import {AlertDialog, Button, Flex, Spinner} from "@radix-ui/themes";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import React from "react";
@@ -8,13 +8,26 @@ import { BiTrash } from "react-icons/bi";
 const DeleteBlogButton = ({ issueId }: { issueId: number }) => {
   const router = useRouter();
   const [error, setError] = React.useState<boolean>(false);
+  const [isDeleting, setIsDeleting] = React.useState(false);
+
+  const deleteBlog = async () => {
+    try {
+      setIsDeleting(true);
+      await axios.delete(`/api/blogs/${issueId}`);
+      router.push("/blogs");
+      router.refresh();
+    } catch (error) {
+      setIsDeleting(false);
+      setError(true);
+    } finally {setIsDeleting(false);}
+  };
 
   return (
     <>
       <AlertDialog.Root>
         <AlertDialog.Trigger>
-          <Button color="red" variant="soft">
-            <BiTrash size={15} />
+          <Button disabled={isDeleting} color="red" variant="soft">
+            {isDeleting ? <Spinner /> : <BiTrash size={15}/>}
           </Button>
         </AlertDialog.Trigger>
         <AlertDialog.Content>
@@ -26,15 +39,7 @@ const DeleteBlogButton = ({ issueId }: { issueId: number }) => {
             <AlertDialog.Action>
               <Button
                 color="red"
-                onClick={async () => {
-                  try {
-                    await axios.delete(`/api/blogs/${issueId}`);
-                    router.push("/blogs");
-                    router.refresh();
-                  } catch (error) {
-                    setError(true);
-                  }
-                }}
+                onClick={deleteBlog}
               >
                 Delete
               </Button>
