@@ -1,5 +1,4 @@
 "use client";
-import { Container } from "@radix-ui/themes";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { BiBook } from "react-icons/bi";
@@ -11,8 +10,8 @@ const NavBar = () => {
   const links = [
     { label: "Blogs", href: "/blogs" },
     { label: "Write", href: "/blogs/new" },
-    { label: "sign Up", href: "/sign-up" },
-    { label: "Sign In", href: "/api/auth/signin" },
+    { label: "sign Up", href: "/auth/register" },
+    { label: "Sign In", href: "/auth/signin" },
   ];
 
   return (
