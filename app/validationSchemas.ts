@@ -21,3 +21,7 @@ export const patchBlogSchema = z.object({
     .min(3, { message: "content cannot be less that 3 characters" })
     .optional(),
 });
+export const registrationSchema = z.object({
+  email: z.string().email().max(255),
+  password: z.string().min(5),
+});
