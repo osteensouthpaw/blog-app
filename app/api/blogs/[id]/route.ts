@@ -3,10 +3,8 @@ import prisma from "@/prisma/client";
 import { Blog } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function PATCH(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const body: Blog = await request.json();
   const validation = patchBlogSchema.safeParse(body);
 
@@ -34,10 +32,8 @@ export async function PATCH(
   return NextResponse.json(updatedBlog);
 }
 
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function DELETE(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const blog = await prisma.blog.findUnique({
     where: { id: parseInt(params.id) },
   });

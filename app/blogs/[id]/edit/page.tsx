@@ -10,10 +10,11 @@ const BlogForm = dynamic(() => import("@/app/blogs/_components/BlogForm"), {
 });
 
 interface Props {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
-const BlogEditPage = async ({ params }: Props) => {
+const BlogEditPage = async (props: Props) => {
+  const params = await props.params;
   const blog = await prisma.blog.findUnique({
     where: { id: parseInt(params.id) },
   });

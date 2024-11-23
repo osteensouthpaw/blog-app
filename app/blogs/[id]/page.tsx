@@ -15,10 +15,11 @@ import { RxPencil2 } from "react-icons/rx";
 import DeleteBlogButton from "./DeleteBlogButton";
 
 interface Props {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
-const BlogDetailPage = async ({ params }: Props) => {
+const BlogDetailPage = async (props: Props) => {
+  const params = await props.params;
   const blog = await prisma.blog.findUnique({
     where: { id: parseInt(params.id) },
   });
