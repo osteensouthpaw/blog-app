@@ -3,11 +3,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { BiBook } from "react-icons/bi";
 import { Box, Button, Container, Flex } from "@radix-ui/themes";
-import { useSession } from "next-auth/react";
 
 const NavBar = () => {
   const pathname = usePathname();
-  const { status, data: session } = useSession();
 
   const links = [
     { label: "Blogs", href: "/blogs" },
@@ -35,7 +33,7 @@ const NavBar = () => {
               </li>
             ))}
           </ul>
-          <Box>
+          {/* <Box>
             {status === "authenticated" ? (
               <Link href={"/api/auth/signout"}>Sign Out</Link>
             ) : (
@@ -48,7 +46,7 @@ const NavBar = () => {
                 </Button>
               </Flex>
             )}
-          </Box>
+          </Box> */}
         </Flex>
       </Container>
     </nav>
