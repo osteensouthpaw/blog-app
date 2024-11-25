@@ -1,13 +1,17 @@
 "use client";
 import React, { PropsWithChildren } from "react";
-import { Grid } from "@radix-ui/themes";
+import { Flex } from "@radix-ui/themes";
 
 const AuthLayout = ({ children }: PropsWithChildren) => {
   return (
-    <Grid columns={{ initial: "1", md: "2" }} className="min-h-svh">
+    <Flex
+      justify="center"
+      height="full"
+      align="center"
+      style={{ backgroundImage: "url(background-image.svg)" }}
+    >
       <section>{children}</section>
-      <section className="bg-amber-200">Image here</section>
-    </Grid>
+    </Flex>
   );
 };
 

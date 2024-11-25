@@ -1,6 +1,5 @@
-import React, { PropsWithChildren } from "react";
 import { Text } from "@radix-ui/themes";
-import { FieldError } from "react-hook-form";
+import { PropsWithChildren } from "react";
 
 const ErrorMessage = ({ children }: PropsWithChildren) => {
   if (!children) return null;

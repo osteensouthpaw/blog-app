@@ -1,13 +1,7 @@
 import React from "react";
 import prisma from "@/prisma/client";
 import { notFound } from "next/navigation";
-import dynamic from "next/dynamic";
-import BlogFormSkeleton from "../../_components/BlogFormSkeleton";
-
-const BlogForm = dynamic(() => import("@/app/blogs/_components/BlogForm"), {
-  ssr: false,
-  loading: () => <BlogFormSkeleton />,
-});
+import BlogFormWrapper from "@/app/blogs/[id]/edit/BlogFormWrapper";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -21,7 +15,7 @@ const BlogEditPage = async (props: Props) => {
 
   if (!blog) return notFound();
 
-  return <BlogForm blog={blog} />;
+  return <BlogFormWrapper blog={blog} />;
 };
 
 export default BlogEditPage;

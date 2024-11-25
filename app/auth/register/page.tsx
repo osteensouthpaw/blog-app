@@ -3,11 +3,12 @@ import React from "react";
 import { Box, Button, Heading, Text, TextField } from "@radix-ui/themes";
 import Link from "next/link";
 import { Field, Form, Label } from "@radix-ui/react-form";
+import Social from "../Social";
 
 const RegistrationForm = () => {
   return (
     <Form>
-      <Box className="w-full max-w-xl mx-auto overflow-hidden rounded-lg">
+      <Box className="w-full mx-auto overflow-hidden rounded-lg">
         <Box className="p-6 md:p-8 space-y-6">
           <Box className="space-y-2 text-center">
             <Heading className="text-3xl font-bold">Sign Up</Heading>
@@ -57,6 +58,7 @@ const RegistrationForm = () => {
               </Link>
             </div>
           </Box>
+          <Social />
         </Box>
       </Box>
     </Form>

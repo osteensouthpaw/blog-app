@@ -1,16 +1,7 @@
 import prisma from "@/prisma/client";
-import {
-  AlertDialog,
-  Box,
-  Button,
-  Dialog,
-  Flex,
-  Heading,
-  Text,
-} from "@radix-ui/themes";
+import { Box, Button, Flex, Heading, Text } from "@radix-ui/themes";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { BiTrash } from "react-icons/bi";
 import { RxPencil2 } from "react-icons/rx";
 import DeleteBlogButton from "./DeleteBlogButton";
 

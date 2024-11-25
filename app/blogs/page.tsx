@@ -9,13 +9,13 @@ const BlogsPage = async () => {
   return (
     <Box className="space-y-6">
       <Heading className="text-zinc-800 font-bold" size="8">
-        I Love Writing blogs About Techonology
+        I Love Writing blogs About Technology
       </Heading>
       <Text as="p" className="text-zinc-500 !mb-20">
         All of my long-form thoughts on programming, content creation,and more,
         collected in chronological order.
       </Text>
-      <Flex direction="column" gap="6" className="md:border-l">
+      <Flex direction="column" gap="6" className="md:border-l max-w-5xl">
         {blogs.map((blog) => (
           <Flex key={blog.id} className="flex-col md:flex-row gap-2">
             <Text
@@ -35,7 +35,7 @@ const BlogsPage = async () => {
                   {blog.title}
                 </Heading>
                 <Text as="p" className="text-zinc-500">
-                  {blog.content.split(" ").slice(0, 60).join(" ").concat("...")}
+                  {blog.content.split(" ").slice(0, 40).join(" ").concat("...")}
                 </Text>
                 <Link size="2">
                   Read article

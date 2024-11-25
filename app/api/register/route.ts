@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/prisma/client";
 import bcrypt from "bcrypt";
-import { registrationSchema } from "@/app/validationSchemas";
+import { loginSchema } from "@/app/validationSchemas";
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
-  const validation = registrationSchema.safeParse(body);
+  const validation = loginSchema.safeParse(body);
 
   if (!validation.success)
     return NextResponse.json(validation.error.format(), { status: 400 });
