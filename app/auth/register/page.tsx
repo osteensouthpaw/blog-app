@@ -1,6 +1,13 @@
 "use client";
 import React, { useState } from "react";
-import { Box, Button, Heading, Text, TextField } from "@radix-ui/themes";
+import {
+  Box,
+  Button,
+  Heading,
+  Spinner,
+  Text,
+  TextField,
+} from "@radix-ui/themes";
 import Link from "next/link";
 import { Field, Form, Label } from "@radix-ui/react-form";
 import Social from "../Social";
@@ -8,7 +15,7 @@ import { z } from "zod";
 import { registrationSchema } from "@/app/validationSchemas";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import FormError from "@/app/components/FormError";
 import FormSuccess from "@/app/components/FormSuccess";
 
@@ -16,23 +23,31 @@ type RegistrationFormData = z.infer<typeof registrationSchema>;
 
 const RegistrationForm = () => {
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+
   const {
     register,
     handleSubmit,
+    reset,
     formState: { isSubmitting },
   } = useForm<RegistrationFormData>({
     resolver: zodResolver(registrationSchema),
   });
 
-  const onSubmit = handleSubmit((data) =>
+  const onSubmit = handleSubmit((data) => {
+    setError("");
+    setSuccess("");
     axios
       .post("/api/register", data)
-      .then((res) => res.data)
-      .catch((err) => {
-        console.log(err);
-        setError(err);
+      .then((res) => {
+        setSuccess(res.data.success);
+        console.log(res.data.success);
+        reset();
       })
-  );
+      .catch((err) => {
+        if (err instanceof AxiosError) setError(err.response?.data.error);
+      });
+  });
 
   return (
     <Form onSubmit={onSubmit}>
@@ -83,9 +98,9 @@ const RegistrationForm = () => {
                 />
               </Field>
               <FormError message={error} />
-              <FormSuccess />
+              <FormSuccess message={success} />
               <Button disabled={isSubmitting} type="submit" className="w-full">
-                Sign Up
+                {isSubmitting && <Spinner />} Sign Up
               </Button>
             </Box>
             <div className="mt-4 text-center text-sm">

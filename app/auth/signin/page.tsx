@@ -5,7 +5,7 @@ import { loginSchema } from "@/app/validationSchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Field, Form, Label } from "@radix-ui/react-form";
 import { Box, Button, Heading, Text, TextField } from "@radix-ui/themes";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -25,12 +25,10 @@ const LoginPage = () => {
     axios
       .post("/api/login", data)
       .then((res) => {
-        console.log(res.data);
-        setSucess(res.data);
+        setSucess(res.data.success);
       })
       .catch((err) => {
-        console.log(err);
-        setError(err);
+        if (err instanceof AxiosError) setError(err.response?.data.error);
       })
   );
 

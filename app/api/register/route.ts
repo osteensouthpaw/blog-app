@@ -15,7 +15,10 @@ export async function POST(request: NextRequest) {
   });
 
   if (user)
-    return NextResponse.json({ error: "User already exists" }, { status: 400 });
+    return NextResponse.json(
+      { error: "email already exists" },
+      { status: 400 }
+    );
 
   const password = await bcrypt.hash(body.password, 8);
   const newUser = await prisma.user.create({
@@ -26,5 +29,5 @@ export async function POST(request: NextRequest) {
     },
   });
 
-  return NextResponse.json({ email: newUser.email });
+  return NextResponse.json({ success: "Successful" });
 }
