@@ -1,35 +1,34 @@
 "use client";
+import { login } from "@/actions/login";
 import FormError from "@/app/components/FormError";
 import FormSuccess from "@/app/components/FormSuccess";
 import { loginSchema } from "@/app/validationSchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Field, Form, Label } from "@radix-ui/react-form";
 import { Box, Button, Heading, Text, TextField } from "@radix-ui/themes";
-import axios, { AxiosError } from "axios";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import Social from "../Social";
 
-type SignInFormData = z.infer<typeof loginSchema>;
+export type SignInFormData = z.infer<typeof loginSchema>;
 
 const LoginPage = () => {
   const [error, setError] = useState<string | undefined>("");
   const [success, setSucess] = useState<string | undefined>("");
+  const [isPending, startTransition] = useTransition();
   const { register, handleSubmit } = useForm<SignInFormData>({
     resolver: zodResolver(loginSchema),
   });
 
   const onSubmit = handleSubmit((data: SignInFormData) =>
-    axios
-      .post("/api/login", data)
-      .then((res) => {
-        setSucess(res.data.success);
-      })
-      .catch((err) => {
-        if (err instanceof AxiosError) setError(err.response?.data.error);
-      })
+    startTransition(() => {
+      login(data).then((data) => {
+        setError(data?.error);
+        setSucess(data.success);
+      });
+    })
   );
 
   return (
@@ -66,7 +65,7 @@ const LoginPage = () => {
               </Field>
               <FormError message={error} />
               <FormSuccess message={success} />
-              <Button type="submit" className="w-full">
+              <Button disabled={isPending} type="submit" className="w-full">
                 Login
               </Button>
               <Social />

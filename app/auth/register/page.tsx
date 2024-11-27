@@ -1,5 +1,10 @@
 "use client";
-import React, { useState } from "react";
+import { register as registerUser } from "@/actions/register";
+import FormError from "@/app/components/FormError";
+import FormSuccess from "@/app/components/FormSuccess";
+import { registrationSchema } from "@/app/validationSchemas";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Field, Form, Label } from "@radix-ui/react-form";
 import {
   Box,
   Button,
@@ -9,44 +14,30 @@ import {
   TextField,
 } from "@radix-ui/themes";
 import Link from "next/link";
-import { Field, Form, Label } from "@radix-ui/react-form";
-import Social from "../Social";
-import { z } from "zod";
-import { registrationSchema } from "@/app/validationSchemas";
+import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import axios, { AxiosError } from "axios";
-import FormError from "@/app/components/FormError";
-import FormSuccess from "@/app/components/FormSuccess";
+import { z } from "zod";
+import Social from "../Social";
 
-type RegistrationFormData = z.infer<typeof registrationSchema>;
+export type RegistrationFormData = z.infer<typeof registrationSchema>;
 
 const RegistrationForm = () => {
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
-
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { isSubmitting },
-  } = useForm<RegistrationFormData>({
+  const [error, setError] = useState<string | undefined>("");
+  const [success, setSuccess] = useState<string | undefined>("");
+  const [isPending, startTransition] = useTransition();
+  const { register, handleSubmit } = useForm<RegistrationFormData>({
     resolver: zodResolver(registrationSchema),
   });
 
   const onSubmit = handleSubmit((data) => {
     setError("");
     setSuccess("");
-    axios
-      .post("/api/register", data)
-      .then((res) => {
-        setSuccess(res.data.success);
-        console.log(res.data.success);
-        reset();
-      })
-      .catch((err) => {
-        if (err instanceof AxiosError) setError(err.response?.data.error);
+    startTransition(() => {
+      registerUser(data).then((data) => {
+        setError(data.error);
+        setSuccess(data.success);
       });
+    });
   });
 
   return (
@@ -99,8 +90,8 @@ const RegistrationForm = () => {
               </Field>
               <FormError message={error} />
               <FormSuccess message={success} />
-              <Button disabled={isSubmitting} type="submit" className="w-full">
-                {isSubmitting && <Spinner />} Sign Up
+              <Button disabled={isPending} type="submit" className="w-full">
+                {isPending && <Spinner />} Sign Up
               </Button>
             </Box>
             <div className="mt-4 text-center text-sm">
