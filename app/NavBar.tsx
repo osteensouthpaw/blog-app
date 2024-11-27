@@ -1,17 +1,23 @@
 "use client";
+import {
+  Avatar,
+  Badge,
+  Box,
+  Button,
+  Container,
+  Flex,
+  Text,
+  DropdownMenu,
+  Dialog,
+} from "@radix-ui/themes";
+import { Session } from "next-auth";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { BiBook } from "react-icons/bi";
-import { Box, Button, Container, Flex } from "@radix-ui/themes";
+import { RxAvatar } from "react-icons/rx";
 
 const NavBar = () => {
-  const pathname = usePathname();
-
-  const links = [
-    { label: "Blogs", href: "/blogs" },
-    { label: "Write", href: "/blogs/new" },
-  ];
-
   return (
     <nav className="p-3 border-b">
       <Container>
@@ -19,37 +25,91 @@ const NavBar = () => {
           <Link href="/">
             <BiBook size={35} />
           </Link>
-          <ul className="flex gap-6">
-            {links.map((link) => (
-              <li key={link.href}>
-                <Link
-                  href={link.href}
-                  className={` ${
-                    pathname === link.href ? "text-zinc-900" : "text-zinc-500"
-                  }  hover:text-zinc-900 transition-colors`}
-                >
-                  {link.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-          {/* <Box>
-            {status === "authenticated" ? (
-              <Link href={"/api/auth/signout"}>Sign Out</Link>
-            ) : (
-              <Flex gap="4">
-                <Button variant="outline">
-                  <Link href={"/auth/signin"}>Sign In</Link>
-                </Button>
-                <Button>
-                  <Link href="/auth/register">Sign Up</Link>
-                </Button>
-              </Flex>
-            )}
-          </Box> */}
+          <NavLinks />
+          <AuthLinks />
         </Flex>
       </Container>
     </nav>
+  );
+};
+
+const NavLinks = () => {
+  const pathname = usePathname();
+
+  const links = [
+    { label: "Blogs", href: "/blogs" },
+    { label: "Write", href: "/blogs/new" },
+  ];
+  return (
+    <ul className="flex gap-6">
+      {links.map((link) => (
+        <li key={link.href}>
+          <Link
+            href={link.href}
+            className={` ${
+              pathname === link.href ? "text-zinc-900" : "text-zinc-500"
+            }  hover:text-zinc-900 transition-colors`}
+          >
+            {link.label}
+          </Link>
+        </li>
+      ))}
+    </ul>
+  );
+};
+
+const AuthLinks = () => {
+  const { status, data: session } = useSession();
+
+  return (
+    <Box>
+      {status === "authenticated" ? (
+        <Dropdown session={session} />
+      ) : (
+        <Flex gap="4">
+          <Button variant="outline">
+            <Link href={"/auth/signin"}>Sign In</Link>
+          </Button>
+          <Button>
+            <Link href="/auth/register">Sign Up</Link>
+          </Button>
+        </Flex>
+      )}
+    </Box>
+  );
+};
+
+const Dropdown = ({ session }: { session: Session }) => {
+  return (
+    <Dialog.Root>
+      <DropdownMenu.Root>
+        <DropdownMenu.Trigger>
+          <button className="focus:outline-none">
+            <Avatar
+              aria-haspopup
+              src={session.user!.image!}
+              fallback={<RxAvatar />}
+            />
+          </button>
+        </DropdownMenu.Trigger>
+        <DropdownMenu.Content align="end">
+          <DropdownMenu.Label>
+            <Text>{session.user?.name}</Text>
+          </DropdownMenu.Label>
+          <DropdownMenu.Item>
+            <Flex justify="between" gap="6">
+              <Text>Profile</Text>
+              <Badge radius="large" variant="surface">
+                New
+              </Badge>
+            </Flex>
+          </DropdownMenu.Item>
+          <DropdownMenu.Item>
+            <Link href={"/api/auth/signout"}>Sign Out</Link>
+          </DropdownMenu.Item>
+        </DropdownMenu.Content>
+      </DropdownMenu.Root>
+    </Dialog.Root>
   );
 };
 
