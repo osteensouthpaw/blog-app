@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE `Blog` ADD COLUMN `userId` VARCHAR(255) NOT NULL DEFAULT 'cm3xuqzl6000365venq6v9pbf';
+
+-- AddForeignKey
+ALTER TABLE `Blog` ADD CONSTRAINT `Blog_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
