@@ -1,4 +1,5 @@
 "use client";
+import { logout } from "@/actions/logout";
 import {
   Avatar,
   Badge,
@@ -105,7 +106,7 @@ const Dropdown = ({ session }: { session: Session }) => {
             </Flex>
           </DropdownMenu.Item>
           <DropdownMenu.Item>
-            <Link href={"/api/auth/signout"}>Sign Out</Link>
+            <button onClick={logout}>Sign Out</button>
           </DropdownMenu.Item>
         </DropdownMenu.Content>
       </DropdownMenu.Root>
