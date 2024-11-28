@@ -12,7 +12,7 @@ import {
   Dialog,
 } from "@radix-ui/themes";
 import { Session } from "next-auth";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { BiBook } from "react-icons/bi";
@@ -106,7 +106,7 @@ const Dropdown = ({ session }: { session: Session }) => {
             </Flex>
           </DropdownMenu.Item>
           <DropdownMenu.Item>
-            <button onClick={logout}>Sign Out</button>
+            <button onClick={() => signOut()}>Sign Out</button>
           </DropdownMenu.Item>
         </DropdownMenu.Content>
       </DropdownMenu.Root>
