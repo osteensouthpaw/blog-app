@@ -35,15 +35,13 @@ const BlogsPage = async () => {
                 <Heading as="h3" size="4" className="font-bold">
                   {blog.title}
                 </Heading>
-                <Text as="p" className="text-zinc-500">
-                  <BlogViewer
-                    content={blog.content
-                      .split(" ")
-                      .slice(0, 40)
-                      .join(" ")
-                      .concat("...")}
-                  />
-                </Text>
+                <BlogViewer
+                  content={blog.content
+                    .split(" ")
+                    .slice(0, 40)
+                    .join(" ")
+                    .concat("...")}
+                />
                 <Link size="2">
                   Read article
                   <RxDoubleArrowRight size={12} className="inline-flex m-1" />
