@@ -8,7 +8,8 @@ import "easymde/dist/easymde.min.css";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import SimpleMDE from "react-simplemde-editor";
+import ReactQuill from "react-quill-new";
+import "react-quill-new/dist/quill.snow.css";
 import { z } from "zod";
 import ErrorMessage from "../../components/ErrorMessage";
 
@@ -57,7 +58,7 @@ const BlogForm = ({ blog }: { blog?: Blog }) => {
           name="content"
           control={control}
           render={({ field }) => (
-            <SimpleMDE placeholder="Content here" {...field} />
+            <ReactQuill placeholder="Content here" {...field} />
           )}
         />
         <ErrorMessage>{errors.content?.message}</ErrorMessage>

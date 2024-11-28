@@ -2,6 +2,7 @@ import prisma from "@/prisma/client";
 import { Box, Flex, Heading, Link, Text } from "@radix-ui/themes";
 import NextLink from "next/link";
 import { RxDoubleArrowRight } from "react-icons/rx";
+import BlogViewer from "./_components/BlogViewer";
 
 const BlogsPage = async () => {
   const blogs = await prisma.blog.findMany();
@@ -35,7 +36,13 @@ const BlogsPage = async () => {
                   {blog.title}
                 </Heading>
                 <Text as="p" className="text-zinc-500">
-                  {blog.content.split(" ").slice(0, 40).join(" ").concat("...")}
+                  <BlogViewer
+                    content={blog.content
+                      .split(" ")
+                      .slice(0, 40)
+                      .join(" ")
+                      .concat("...")}
+                  />
                 </Text>
                 <Link size="2">
                   Read article

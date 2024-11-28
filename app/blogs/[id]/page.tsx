@@ -4,6 +4,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { RxPencil2 } from "react-icons/rx";
 import DeleteBlogButton from "./DeleteBlogButton";
+import React from "react";
+import BlogViewer from "../_components/BlogViewer";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -32,9 +34,7 @@ const BlogDetailPage = async (props: Props) => {
           </Button>
           <DeleteBlogButton issueId={blog.id} />
         </Flex>
-        <Text as="p" className="text-zinc-600">
-          {blog.content}
-        </Text>
+        <BlogViewer content={blog.content} />
       </Box>
     </Box>
   );
