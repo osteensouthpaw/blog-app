@@ -7,17 +7,14 @@ import {
   Button,
   Card,
   Flex,
-  Grid,
   Heading,
   Link,
   Text,
 } from "@radix-ui/themes";
-import { notFound } from "next/navigation";
-import React from "react";
-import { BiBook, BiBookContent, BiRightArrowAlt } from "react-icons/bi";
-import { RxAvatar } from "react-icons/rx";
 import NextLink from "next/link";
-import { FcAddressBook, FcBookmark, FcEmptyTrash } from "react-icons/fc";
+import { notFound } from "next/navigation";
+import { BiBookContent, BiRightArrowAlt } from "react-icons/bi";
+import { RxAvatar } from "react-icons/rx";
 
 const UserProfilePage = async () => {
   const session = await auth();
@@ -47,7 +44,9 @@ const UserProfilePage = async () => {
               />
               <Text className="font-semibold">{user.name}</Text>
             </Flex>
-            <Button>Edit</Button>
+            <NextLink href={`/users/${user.id}/edit`} className="block">
+              <Button>Edit</Button>
+            </NextLink>
           </Flex>
           <Flex>
             <Flex direction="column" flexGrow="1">
