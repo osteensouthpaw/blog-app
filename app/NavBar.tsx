@@ -98,7 +98,7 @@ const Dropdown = ({ session }: { session: Session }) => {
           </DropdownMenu.Label>
           <DropdownMenu.Item>
             <Flex justify="between" gap="6">
-              <Text>Profile</Text>
+              <Link href={`/users/${session.user?.id}`}>Profile</Link>
               <Badge radius="large" variant="surface">
                 New
               </Badge>

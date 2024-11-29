@@ -1,17 +1,37 @@
+import BlogViewer from "@/app/blogs/_components/BlogViewer";
+import { auth } from "@/auth";
+import prisma from "@/prisma/client";
 import {
   Avatar,
   Box,
   Button,
   Card,
   Flex,
+  Grid,
   Heading,
   Link,
   Text,
 } from "@radix-ui/themes";
-import { BiRightArrowAlt } from "react-icons/bi";
+import { notFound } from "next/navigation";
+import React from "react";
+import { BiBook, BiBookContent, BiRightArrowAlt } from "react-icons/bi";
 import { RxAvatar } from "react-icons/rx";
+import NextLink from "next/link";
+import { FcAddressBook, FcBookmark, FcEmptyTrash } from "react-icons/fc";
 
-const UserProfilePage = () => {
+const UserProfilePage = async () => {
+  const session = await auth();
+  if (!session || !session.user) return null;
+
+  const user = await prisma.user.findUnique({
+    where: { id: session.user.id },
+    include: { blogs: true },
+  });
+
+  if (!user) return notFound();
+
+  const drafts = user.blogs.filter((blog) => !blog.isPublished);
+
   return (
     <Box className="max-w-3xl mx-auto space-y-11">
       <Box className="space-y-5">
@@ -22,17 +42,17 @@ const UserProfilePage = () => {
               <Avatar
                 size="4"
                 radius="full"
-                src={"image"!}
+                src={user.image!}
                 fallback={<RxAvatar />}
               />
-              <Text className="font-semibold">My name</Text>
+              <Text className="font-semibold">{user.name}</Text>
             </Flex>
             <Button>Edit</Button>
           </Flex>
           <Flex>
             <Flex direction="column" flexGrow="1">
               <Text className="font-semibold">Email</Text>
-              <Text className="text-zinc-500 text-sm">email@gmail.com</Text>
+              <Text className="text-zinc-500 text-sm">{user.email}</Text>
             </Flex>
             <Button>Edit</Button>
           </Flex>
@@ -41,7 +61,9 @@ const UserProfilePage = () => {
 
       <Box className="space-y-5">
         <Flex align="baseline">
-          <Heading className="flex-1">Latest Publications</Heading>
+          <Heading className="flex-1">
+            Latest Publications ({user.blogs.length})
+          </Heading>
           <Link href="#" color="gray">
             <Flex align="center" gap="2">
               <Text className="text-sm">View All</Text>
@@ -49,32 +71,30 @@ const UserProfilePage = () => {
             </Flex>
           </Link>
         </Flex>
-        <Card className="p-8 space-y-7">
-          <Flex gap="5" direction="column" className="text-zinc-600">
-            <Text className="border-b">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem
-              non facere culpa nemo ullam nihil maxime dolores cum iste enim.
-            </Text>
-            <Text className="border-b">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem
-              non facere culpa nemo ullam nihil maxime dolores cum iste enim.
-            </Text>
-            <Text className="border-b">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem
-              non facere culpa nemo ullam nihil maxime dolores cum iste enim.
-            </Text>
-            <Text className="border-b">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem
-              non facere culpa nemo ullam nihil maxime dolores cum iste enim.
-            </Text>
-            <Text className="border-b">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem
-              non facere culpa nemo ullam nihil maxime dolores cum iste enim.
-            </Text>
+        <Card className="p-7 space-y-7">
+          <Flex gap="5" direction="column">
+            {user.blogs.map((blog) => (
+              <Box key={blog.id} className="space-y-2">
+                <NextLink
+                  href={`/blogs/${blog.id}`}
+                  className="font-semibold hover:border-b"
+                >
+                  {blog.title}
+                </NextLink>
+                <BlogViewer
+                  className="border-b text-zinc-500"
+                  content={blog.content
+                    .split(" ")
+                    .slice(0, 20)
+                    .join(" ")
+                    .concat("...")}
+                />
+              </Box>
+            ))}
           </Flex>
-          <Button className="font-semibold text-lg p-5">
-            + Create New Blog
-          </Button>
+          <NextLink href="/blogs/new" className="block">
+            <Button className="font-semibold">Create New Blog</Button>
+          </NextLink>
         </Card>
       </Box>
 
@@ -89,28 +109,30 @@ const UserProfilePage = () => {
           </Link>
         </Flex>
         <Card className="p-8 space-y-7">
-          <Flex gap="5" direction="column" className="text-zinc-600">
-            <Text className="border-b">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem
-              non facere culpa nemo ullam nihil maxime dolores cum iste enim.
-            </Text>
-            <Text className="border-b">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem
-              non facere culpa nemo ullam nihil maxime dolores cum iste enim.
-            </Text>
-            <Text className="border-b">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem
-              non facere culpa nemo ullam nihil maxime dolores cum iste enim.
-            </Text>
-            <Text className="border-b">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem
-              non facere culpa nemo ullam nihil maxime dolores cum iste enim.
-            </Text>
-            <Text className="border-b">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem
-              non facere culpa nemo ullam nihil maxime dolores cum iste enim.
-            </Text>
-          </Flex>
+          {drafts.length > 0 ? (
+            <Flex gap="5" direction="column">
+              {drafts.map((blog) => (
+                <Box key={blog.id} className="space-y-2">
+                  <Text className="font-semibold">{blog.title}</Text>
+                  <BlogViewer
+                    className="border-b text-zinc-500"
+                    content={blog.content
+                      .split(" ")
+                      .slice(0, 20)
+                      .join(" ")
+                      .concat("...")}
+                  />
+                </Box>
+              ))}
+            </Flex>
+          ) : (
+            <Box>
+              <BiBookContent color="gray" size={50} />
+              <Text className="text-zinc-500">
+                You don't have any drafts yet
+              </Text>
+            </Box>
+          )}
         </Card>
       </Box>
     </Box>
