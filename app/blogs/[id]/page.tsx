@@ -3,10 +3,9 @@ import { Box, Button, Flex, Heading, Text } from "@radix-ui/themes";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { RxPencil2 } from "react-icons/rx";
-import DeleteBlogButton from "./DeleteBlogButton";
-import React from "react";
 import BlogViewer from "../_components/BlogViewer";
 import UserHandle from "../_components/UserHandle";
+import DeleteBlogButton from "./DeleteBlogButton";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -16,6 +15,7 @@ const BlogDetailPage = async (props: Props) => {
   const params = await props.params;
   const blog = await prisma.blog.findUnique({
     where: { id: parseInt(params.id) },
+    include: { user: true },
   });
 
   if (!blog) return notFound();
@@ -26,7 +26,7 @@ const BlogDetailPage = async (props: Props) => {
         {blog.createdAt.toDateString()}
       </Text>
       <Box>
-        <UserHandle />
+        <UserHandle user={blog.user!} />
         <Heading size="8">{blog.title}</Heading>
         <Flex gap="2" mb="7">
           <Button variant="soft">
