@@ -19,9 +19,7 @@ export async function POST(request: NextRequest) {
     data: {
       title: body.title,
       content: body.content,
-      user: {
-        connect: { email: session.user.email! },
-      },
+      userId: session.user.id,
     },
   });
 
