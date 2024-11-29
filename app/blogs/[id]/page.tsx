@@ -6,6 +6,7 @@ import { RxPencil2 } from "react-icons/rx";
 import DeleteBlogButton from "./DeleteBlogButton";
 import React from "react";
 import BlogViewer from "../_components/BlogViewer";
+import UserHandle from "../_components/UserHandle";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -25,6 +26,7 @@ const BlogDetailPage = async (props: Props) => {
         {blog.createdAt.toDateString()}
       </Text>
       <Box>
+        <UserHandle />
         <Heading size="8">{blog.title}</Heading>
         <Flex gap="2" mb="7">
           <Button variant="soft">

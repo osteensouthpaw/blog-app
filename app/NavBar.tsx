@@ -1,15 +1,14 @@
 "use client";
-import { logout } from "@/actions/logout";
 import {
   Avatar,
   Badge,
   Box,
   Button,
   Container,
+  Dialog,
+  DropdownMenu,
   Flex,
   Text,
-  DropdownMenu,
-  Dialog,
 } from "@radix-ui/themes";
 import { Session } from "next-auth";
 import { signOut, useSession } from "next-auth/react";
