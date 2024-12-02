@@ -31,3 +31,8 @@ export const registrationSchema = z.object({
   email: z.string().email().max(255),
   password: z.string().min(5),
 });
+
+export const userUpdateSchema = z.object({
+  name: z.string().min(3).max(255),
+  bio: z.string().min(5).max(2000).optional(),
+});

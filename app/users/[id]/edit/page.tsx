@@ -1,17 +1,29 @@
-import { Form, FormField, FormLabel } from "@radix-ui/react-form";
+import prisma from "@/prisma/client";
 import {
   Avatar,
   Box,
   Button,
   Flex,
-  Heading,
-  TextArea,
-  TextField,
+  Heading
 } from "@radix-ui/themes";
+import { notFound } from "next/navigation";
 import { FaPencil } from "react-icons/fa6";
 import { RxAvatar } from "react-icons/rx";
+import UserEditForm from "./UserEditForm";
 
-const ProfileEditPage = () => {
+interface Props {
+  params: Promise<{ id: string }>;
+}
+
+const ProfileEditPage = async (props: Props) => {
+  const params = await props.params;
+
+  const user = await prisma.user.findUnique({
+    where: { id: params.id },
+  });
+
+  if (!user) return notFound();
+
   return (
     <Box className="max-w-xl mx-auto space-y-11">
       <Flex>
@@ -21,7 +33,7 @@ const ProfileEditPage = () => {
       <Box className="relative max-w-max">
         <Avatar
           radius="full"
-          src=""
+          src={user.image!}
           fallback={<RxAvatar size={25} />}
           size="6"
           className="border-4 border-zinc-700"
@@ -31,17 +43,7 @@ const ProfileEditPage = () => {
           className="rounded-full absolute bottom-0 -right-4"
         />
       </Box>
-
-      <Form className="space-y-9">
-        <FormField name="user-name" className="space-y-2">
-          <FormLabel>Name</FormLabel>
-          <TextField.Root name="user-name" />
-        </FormField>
-        <FormField name="bio" className="space-y-2">
-          <FormLabel>Bio</FormLabel>
-          <TextArea name="bio" size="3" className="h-20" />
-        </FormField>
-      </Form>
+      <UserEditForm user={user} />
     </Box>
   );
 };
