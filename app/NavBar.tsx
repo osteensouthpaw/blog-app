@@ -10,12 +10,14 @@ import {
   Flex,
   Text,
   Link,
+  TabNav,
 } from "@radix-ui/themes";
+import * as NavigationMenu from "@radix-ui/react-navigation-menu";
 import { Session } from "next-auth";
 import { signOut, useSession } from "next-auth/react";
 import NextLink from "next/link";
 import { usePathname } from "next/navigation";
-import { BiBook } from "react-icons/bi";
+import { BiBook, BiCaretDown } from "react-icons/bi";
 import { RxAvatar } from "react-icons/rx";
 
 const NavBar = () => {
@@ -42,20 +44,13 @@ const NavLinks = () => {
     { label: "Write", href: "/blogs/new" },
   ];
   return (
-    <ul className="flex gap-6">
+    <TabNav.Root className="flex gap-6">
       {links.map((link) => (
-        <li key={link.href}>
-          <NextLink
-            href={link.href}
-            className={` ${
-              pathname === link.href ? "text-zinc-900" : "text-zinc-500"
-            }  hover:text-zinc-900 transition-colors`}
-          >
-            {link.label}
-          </NextLink>
-        </li>
+        <TabNav.Link key={link.href} asChild active={pathname === link.href}>
+          <NextLink href={link.href}>{link.label}</NextLink>
+        </TabNav.Link>
       ))}
-    </ul>
+    </TabNav.Root>
   );
 };
 
