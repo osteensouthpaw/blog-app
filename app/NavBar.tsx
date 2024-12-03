@@ -9,10 +9,11 @@ import {
   DropdownMenu,
   Flex,
   Text,
+  Link,
 } from "@radix-ui/themes";
 import { Session } from "next-auth";
 import { signOut, useSession } from "next-auth/react";
-import Link from "next/link";
+import NextLink from "next/link";
 import { usePathname } from "next/navigation";
 import { BiBook } from "react-icons/bi";
 import { RxAvatar } from "react-icons/rx";
@@ -22,9 +23,9 @@ const NavBar = () => {
     <nav className="p-3 border-b">
       <Container>
         <Flex justify="between" align="center">
-          <Link href="/">
+          <NextLink href="/">
             <BiBook size={35} />
-          </Link>
+          </NextLink>
           <NavLinks />
           <AuthLinks />
         </Flex>
@@ -44,14 +45,14 @@ const NavLinks = () => {
     <ul className="flex gap-6">
       {links.map((link) => (
         <li key={link.href}>
-          <Link
+          <NextLink
             href={link.href}
             className={` ${
               pathname === link.href ? "text-zinc-900" : "text-zinc-500"
             }  hover:text-zinc-900 transition-colors`}
           >
             {link.label}
-          </Link>
+          </NextLink>
         </li>
       ))}
     </ul>
@@ -68,10 +69,10 @@ const AuthLinks = () => {
       ) : (
         <Flex gap="4">
           <Button variant="outline">
-            <Link href={"/auth/signin"}>Sign In</Link>
+            <NextLink href={"/auth/signin"}>Sign In</NextLink>
           </Button>
           <Button>
-            <Link href="/auth/register">Sign Up</Link>
+            <NextLink href="/auth/register">Sign Up</NextLink>
           </Button>
         </Flex>
       )}
@@ -97,12 +98,14 @@ const Dropdown = ({ session }: { session: Session }) => {
             <Text>{session.user?.name}</Text>
           </DropdownMenu.Label>
           <DropdownMenu.Item>
-            <Flex justify="between" gap="6">
-              <Link href={`/users/${session.user?.id}`}>Profile</Link>
-              <Badge radius="large" variant="surface">
-                New
-              </Badge>
-            </Flex>
+            <NextLink href={`/users/${session.user?.id}`} legacyBehavior>
+              <Flex justify="between" gap="6">
+                <Link>Profile</Link>
+                <Badge radius="large" variant="surface">
+                  New
+                </Badge>
+              </Flex>
+            </NextLink>
           </DropdownMenu.Item>
           <DropdownMenu.Item>
             <button onClick={() => signOut()}>Sign Out</button>
