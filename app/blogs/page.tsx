@@ -1,15 +1,25 @@
 import prisma from "@/prisma/client";
-import { Badge, Box, Flex, Heading, Link, Text } from "@radix-ui/themes";
+import { Box, Flex, Heading, Link, Text } from "@radix-ui/themes";
 import NextLink from "next/link";
 import { RxDoubleArrowRight } from "react-icons/rx";
 import BlogViewer from "./_components/BlogViewer";
+import CategoriesFilter from "./CategoriesFilter";
 
-const BlogsPage = async () => {
-  const blogs = await prisma.blog.findMany();
+interface Props {
+  searchParams: Promise<{ category: string }>;
+}
+
+const BlogsPage = async ({ searchParams }: Props) => {
+  const categoryId = (await searchParams).category;
+  const blogs = await prisma.blog.findMany({
+    where: {
+      categoryId: parseInt(categoryId) || undefined,
+    },
+  });
   const categories = await prisma.category.findMany();
 
   return (
-    <Box className="space-y-6">
+    <Box className="space-y-6 max-w-5xl">
       <Heading className="text-zinc-800 font-bold" size="8">
         Your Blog. Your Voice. Your World. 🌎
       </Heading>
@@ -21,16 +31,7 @@ const BlogsPage = async () => {
         <br />
         Explore, engage , and let your voice be heard!
       </Text>
-      <Flex gap="3" wrap="wrap">
-        <Badge size="3" variant="surface">
-          All
-        </Badge>
-        {categories.map((category) => (
-          <Badge size="3" key={category.id}>
-            {category.name}
-          </Badge>
-        ))}
-      </Flex>
+      <CategoriesFilter categories={categories} />
       <Flex direction="column" gap="6" className="md:border-l max-w-5xl">
         {blogs.map((blog) => (
           <Flex key={blog.id} className="flex-col md:flex-row gap-2">
