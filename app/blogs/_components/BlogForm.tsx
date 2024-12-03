@@ -2,13 +2,7 @@
 import { createBlogSchema } from "@/app/validationSchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Blog, Category } from "@prisma/client";
-import {
-  Button,
-  Callout,
-  DropdownMenu,
-  Spinner,
-  TextField,
-} from "@radix-ui/themes";
+import { Button, Callout, Select, Spinner, TextField } from "@radix-ui/themes";
 import axios from "axios";
 import "easymde/dist/easymde.min.css";
 import { useRouter } from "next/navigation";
@@ -19,6 +13,7 @@ import { z } from "zod";
 import ErrorMessage from "../../components/ErrorMessage";
 import dynamic from "next/dynamic";
 import BlogFormSkeleton from "./BlogFormSkeleton";
+import CategoryDropDown from "./CategoryDropDown";
 const ReactQuill = dynamic(() => import("react-quill-new"), {
   ssr: false,
   loading: () => <BlogFormSkeleton />,
@@ -29,7 +24,7 @@ interface Props {
   categories: Category[];
 }
 
-type BlogFormData = z.infer<typeof createBlogSchema>;
+export type BlogFormData = z.infer<typeof createBlogSchema>;
 
 const BlogForm = ({ blog, categories }: Props) => {
   const router = useRouter();
@@ -63,7 +58,11 @@ const BlogForm = ({ blog, categories }: Props) => {
         </Callout.Root>
       )}
       <form className=" space-y-5" onSubmit={onSubmit}>
-        <CategoryDropDown categories={categories} />
+        <CategoryDropDown
+          defaultValue={blog?.categoryId}
+          register={register}
+          categories={categories}
+        />
         <TextField.Root
           defaultValue={blog?.title}
           placeholder="Title"
@@ -89,26 +88,6 @@ const BlogForm = ({ blog, categories }: Props) => {
         </Button>
       </form>
     </div>
-  );
-};
-
-const CategoryDropDown = ({ categories }: Props) => {
-  return (
-    <DropdownMenu.Root>
-      <DropdownMenu.Trigger>
-        <Button variant="soft">
-          Options
-          <DropdownMenu.TriggerIcon />
-        </Button>
-      </DropdownMenu.Trigger>
-      <DropdownMenu.Content>
-        {categories.map((category) => (
-          <DropdownMenu.Item key={category.id}>
-            {category.name}
-          </DropdownMenu.Item>
-        ))}
-      </DropdownMenu.Content>
-    </DropdownMenu.Root>
   );
 };
 

@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 export const createBlogSchema = z.object({
+  category: z.string(),
   title: z
     .string()
     .max(255)
