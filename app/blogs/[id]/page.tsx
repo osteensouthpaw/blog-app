@@ -6,12 +6,14 @@ import { RxPencil2 } from "react-icons/rx";
 import BlogViewer from "../_components/BlogViewer";
 import UserHandle from "../_components/UserHandle";
 import DeleteBlogButton from "./DeleteBlogButton";
+import { auth } from "@/auth";
 
 interface Props {
   params: Promise<{ id: string }>;
 }
 
 const BlogDetailPage = async (props: Props) => {
+  const session = await auth();
   const params = await props.params;
   const blog = await prisma.blog.findUnique({
     where: { id: parseInt(params.id) },
@@ -19,6 +21,8 @@ const BlogDetailPage = async (props: Props) => {
   });
 
   if (!blog) return notFound();
+
+  const isBlogOwner = session && session.user?.id == blog.userId;
 
   return (
     <Box>
@@ -28,15 +32,17 @@ const BlogDetailPage = async (props: Props) => {
       <Box>
         <UserHandle user={blog.user!} />
         <Heading size="8">{blog.title}</Heading>
-        <Flex gap="2" mb="7">
-          <Button variant="soft">
-            <Link href={`/blogs/${blog.id}/edit`}>
-              <RxPencil2 size={15} />
-            </Link>
-          </Button>
-          <DeleteBlogButton issueId={blog.id} />
-        </Flex>
-        <BlogViewer content={blog.content} />
+        {isBlogOwner && (
+          <Flex gap="2">
+            <Button variant="soft">
+              <Link href={`/blogs/${blog.id}/edit`}>
+                <RxPencil2 size={15} />
+              </Link>
+            </Button>
+            <DeleteBlogButton issueId={blog.id} />
+          </Flex>
+        )}
+        <BlogViewer className="mt-7" content={blog.content} />
       </Box>
     </Box>
   );

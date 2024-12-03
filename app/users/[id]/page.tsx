@@ -26,6 +26,7 @@ const UserProfilePage = async () => {
   });
 
   if (!user) return notFound();
+  if (user.id !== session?.user?.id) return null;
 
   const drafts = user.blogs.filter((blog) => !blog.isPublished);
 

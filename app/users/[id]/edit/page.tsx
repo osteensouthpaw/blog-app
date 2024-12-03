@@ -1,21 +1,17 @@
 import prisma from "@/prisma/client";
-import {
-  Avatar,
-  Box,
-  Button,
-  Flex,
-  Heading
-} from "@radix-ui/themes";
+import { Avatar, Box, Button, Flex, Heading } from "@radix-ui/themes";
 import { notFound } from "next/navigation";
 import { FaPencil } from "react-icons/fa6";
 import { RxAvatar } from "react-icons/rx";
 import UserEditForm from "./UserEditForm";
+import { auth } from "@/auth";
 
 interface Props {
   params: Promise<{ id: string }>;
 }
 
 const ProfileEditPage = async (props: Props) => {
+  const session = await auth();
   const params = await props.params;
 
   const user = await prisma.user.findUnique({
@@ -23,6 +19,7 @@ const ProfileEditPage = async (props: Props) => {
   });
 
   if (!user) return notFound();
+  if (user.id !== session?.user?.id) return null;
 
   return (
     <Box className="max-w-xl mx-auto space-y-11">
