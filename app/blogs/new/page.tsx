@@ -1,15 +1,10 @@
-"use client";
-import dynamic from "next/dynamic";
-import React from "react";
-import BlogFormSkeleton from "../_components/BlogFormSkeleton";
+import prisma from "@/prisma/client";
+import BlogForm from "../_components/BlogForm";
 
-const BlogForm = dynamic(() => import("@/app/blogs/_components/BlogForm"), {
-  ssr: false,
-  loading: () => <BlogFormSkeleton />,
-});
+const NewBlogPage = async () => {
+  const categories = await prisma.category.findMany();
 
-const NewBlogPage = () => {
-  return <BlogForm />;
+  return <BlogForm categories={categories} />;
 };
 
 export default NewBlogPage;

@@ -1,21 +1,37 @@
 "use client";
 import { createBlogSchema } from "@/app/validationSchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Blog } from "@prisma/client";
-import { Button, Callout, Spinner, TextField } from "@radix-ui/themes";
+import { Blog, Category } from "@prisma/client";
+import {
+  Button,
+  Callout,
+  DropdownMenu,
+  Spinner,
+  TextField,
+} from "@radix-ui/themes";
 import axios from "axios";
 import "easymde/dist/easymde.min.css";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
 import { z } from "zod";
 import ErrorMessage from "../../components/ErrorMessage";
+import dynamic from "next/dynamic";
+import BlogFormSkeleton from "./BlogFormSkeleton";
+const ReactQuill = dynamic(() => import("react-quill-new"), {
+  ssr: false,
+  loading: () => <BlogFormSkeleton />,
+});
+
+interface Props {
+  blog?: Blog;
+  categories: Category[];
+}
 
 type BlogFormData = z.infer<typeof createBlogSchema>;
 
-const BlogForm = ({ blog }: { blog?: Blog }) => {
+const BlogForm = ({ blog, categories }: Props) => {
   const router = useRouter();
   const {
     register,
@@ -47,6 +63,7 @@ const BlogForm = ({ blog }: { blog?: Blog }) => {
         </Callout.Root>
       )}
       <form className=" space-y-5" onSubmit={onSubmit}>
+        <CategoryDropDown categories={categories} />
         <TextField.Root
           defaultValue={blog?.title}
           placeholder="Title"
@@ -72,6 +89,26 @@ const BlogForm = ({ blog }: { blog?: Blog }) => {
         </Button>
       </form>
     </div>
+  );
+};
+
+const CategoryDropDown = ({ categories }: Props) => {
+  return (
+    <DropdownMenu.Root>
+      <DropdownMenu.Trigger>
+        <Button variant="soft">
+          Options
+          <DropdownMenu.TriggerIcon />
+        </Button>
+      </DropdownMenu.Trigger>
+      <DropdownMenu.Content>
+        {categories.map((category) => (
+          <DropdownMenu.Item key={category.id}>
+            {category.name}
+          </DropdownMenu.Item>
+        ))}
+      </DropdownMenu.Content>
+    </DropdownMenu.Root>
   );
 };
 

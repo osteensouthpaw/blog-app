@@ -1,7 +1,7 @@
 import React from "react";
 import prisma from "@/prisma/client";
 import { notFound } from "next/navigation";
-import BlogFormWrapper from "@/app/blogs/[id]/edit/BlogFormWrapper";
+import BlogForm from "../../_components/BlogForm";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -12,10 +12,11 @@ const BlogEditPage = async (props: Props) => {
   const blog = await prisma.blog.findUnique({
     where: { id: parseInt(params.id) },
   });
+  const categories = await prisma.category.findMany();
 
   if (!blog) return notFound();
 
-  return <BlogFormWrapper blog={blog} />;
+  return <BlogForm blog={blog} categories={categories} />;
 };
 
 export default BlogEditPage;
