@@ -1,21 +1,36 @@
 import prisma from "@/prisma/client";
-import { Box, Flex, Heading, Link, Text } from "@radix-ui/themes";
+import { Badge, Box, Flex, Heading, Link, Text } from "@radix-ui/themes";
 import NextLink from "next/link";
 import { RxDoubleArrowRight } from "react-icons/rx";
 import BlogViewer from "./_components/BlogViewer";
 
 const BlogsPage = async () => {
   const blogs = await prisma.blog.findMany();
+  const categories = await prisma.category.findMany();
 
   return (
     <Box className="space-y-6">
       <Heading className="text-zinc-800 font-bold" size="8">
-        I Love Writing blogs About Technology
+        Your Blog. Your Voice. Your World. 🌎
       </Heading>
       <Text as="p" className="text-zinc-500 !mb-20">
-        All of my long-form thoughts on programming, content creation,and more,
-        collected in chronological order.
+        Dive into a world of insights, stories, and inspiration—crafted just for
+        you.
+        <br />
+        Dive into fresh perspectives and timeless tales.
+        <br />
+        Explore, engage , and let your voice be heard!
       </Text>
+      <Flex gap="3" wrap="wrap">
+        <Badge size="3" variant="surface">
+          All
+        </Badge>
+        {categories.map((category) => (
+          <Badge size="3" key={category.id}>
+            {category.name}
+          </Badge>
+        ))}
+      </Flex>
       <Flex direction="column" gap="6" className="md:border-l max-w-5xl">
         {blogs.map((blog) => (
           <Flex key={blog.id} className="flex-col md:flex-row gap-2">

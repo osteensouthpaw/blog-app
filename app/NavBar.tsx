@@ -8,16 +8,15 @@ import {
   Dialog,
   DropdownMenu,
   Flex,
-  Text,
   Link,
   TabNav,
+  Text,
 } from "@radix-ui/themes";
-import * as NavigationMenu from "@radix-ui/react-navigation-menu";
 import { Session } from "next-auth";
 import { signOut, useSession } from "next-auth/react";
 import NextLink from "next/link";
 import { usePathname } from "next/navigation";
-import { BiBook, BiCaretDown } from "react-icons/bi";
+import { BiBook } from "react-icons/bi";
 import { RxAvatar } from "react-icons/rx";
 
 const NavBar = () => {
