@@ -44,7 +44,6 @@ const LoginPage = () => {
             <Box className="space-y-4">
               <Field name="email" className="space-y-2">
                 <Label htmlFor="email">Email</Label>
-
                 <TextField.Root
                   id="email"
                   type="email"
