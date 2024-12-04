@@ -33,7 +33,7 @@ const CommentForm = ({ blogId }: { blogId: number }) => {
   };
 
   return (
-    <div>
+    <div className="max-w-xl">
       {error && (
         <Callout.Root>
           <Callout.Icon>

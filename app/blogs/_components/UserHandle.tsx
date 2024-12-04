@@ -5,10 +5,10 @@ import { RxAvatar } from "react-icons/rx";
 
 interface Props {
   user: User;
-  showDate?: boolean;
+  date?: Date;
 }
 
-const UserHandle = ({ user, showDate: date }: Props) => {
+const UserHandle = ({ user, date: date }: Props) => {
   return (
     <Flex gap="3" p="2" align="center">
       <Avatar
@@ -20,9 +20,7 @@ const UserHandle = ({ user, showDate: date }: Props) => {
       <Flex direction="column">
         <Text className="font-semibold text-sm">{user.name}</Text>
         {date && (
-          <Text className="text-sm text-zinc-500">
-            {user.createdAt.toString()}
-          </Text>
+          <Text className="text-xs text-zinc-500">{date.toDateString()}</Text>
         )}
       </Flex>
     </Flex>

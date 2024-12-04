@@ -1,18 +1,18 @@
-import React from "react";
-import UserHandle from "../_components/UserHandle";
+import { Comment } from "@prisma/client";
 import { Box, Text } from "@radix-ui/themes";
-import { User } from "@prisma/client";
+import UserHandle from "../_components/UserHandle";
+import prisma from "@/prisma/client";
 
-const CommentCard = () => {
+const CommentCard = async ({ comment }: { comment: Comment }) => {
+  const user = await prisma.user.findUnique({
+    where: { id: comment.userId },
+  });
+  if (!user) return null;
+
   return (
-    <Box className="space-y-2">
-      <UserHandle user={{ name: "osteen", createdAt: new Date() } as User} showDate />
-      <Text className="text-zinc-700 block">
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Maxime et
-        ipsum incidunt laborum quod praesentium temporibus magnam explicabo
-        corporis odit impedit minus vel optio harum, culpa expedita provident
-        assumenda hic?
-      </Text>
+    <Box className="space-y-2 border-b pb-2">
+      <UserHandle user={user} date={comment.createdAt} />
+      <Text className="text-zinc-700 block text-sm">{comment.content}</Text>
     </Box>
   );
 };

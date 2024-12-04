@@ -4,11 +4,11 @@ import { BiInfoCircle } from "react-icons/bi";
 const FormError = ({ message }: { message?: string }) => {
   return (
     message && (
-      <Callout.Root>
+      <Callout.Root color="red">
         <Callout.Icon>
           <BiInfoCircle />
         </Callout.Icon>
-        <Callout.Text color="red">{message}</Callout.Text>
+        <Callout.Text>{message}</Callout.Text>
       </Callout.Root>
     )
   );
