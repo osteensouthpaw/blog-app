@@ -7,6 +7,7 @@ import BlogViewer from "../_components/BlogViewer";
 import UserHandle from "../_components/UserHandle";
 import DeleteBlogButton from "./DeleteBlogButton";
 import { auth } from "@/auth";
+import Comments from "./Comments";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -43,6 +44,7 @@ const BlogDetailPage = async (props: Props) => {
           </Flex>
         )}
         <BlogViewer className="mt-7" content={blog.content} />
+        <Comments />
       </Box>
     </Box>
   );
