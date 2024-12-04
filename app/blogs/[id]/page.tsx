@@ -1,3 +1,4 @@
+import { auth } from "@/auth";
 import prisma from "@/prisma/client";
 import { Box, Button, Flex, Heading, Text } from "@radix-ui/themes";
 import Link from "next/link";
@@ -5,9 +6,8 @@ import { notFound } from "next/navigation";
 import { RxPencil2 } from "react-icons/rx";
 import BlogViewer from "../_components/BlogViewer";
 import UserHandle from "../_components/UserHandle";
-import DeleteBlogButton from "./DeleteBlogButton";
-import { auth } from "@/auth";
 import Comments from "./Comments";
+import DeleteBlogButton from "./DeleteBlogButton";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -44,7 +44,7 @@ const BlogDetailPage = async (props: Props) => {
           </Flex>
         )}
         <BlogViewer className="mt-7" content={blog.content} />
-        <Comments />
+        <Comments blogId={blog.id} />
       </Box>
     </Box>
   );

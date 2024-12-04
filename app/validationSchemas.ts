@@ -37,3 +37,7 @@ export const userUpdateSchema = z.object({
   name: z.string().min(3).max(255),
   bio: z.string().min(5).max(2000).optional(),
 });
+
+export const commentSchema = z.object({
+  content: z.string().min(3).max(20_000),
+});
