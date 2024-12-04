@@ -24,12 +24,24 @@ model Blog {
   user        User?     @relation(fields: [userId], references: [id])
   categoryId  Int
   category    Category? @relation(fields: [categoryId], references: [id])
+  comments    Comment[]
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  content   String   @db.Text
+  blogId    Int
+  Blog      Blog?    @relation(fields: [blogId], references: [id])
+  userId    String   @db.VarChar(255)
+  user      User?    @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Category {
   id          Int     @id @default(autoincrement())
   name        String  @db.VarChar(255)
-  description String? @db.VarChar(1000)
+  description String? @db.Text
   blogs       Blog[]
 }
 
@@ -46,6 +58,7 @@ model User {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   blogs         Blog[]
+  Comment       Comment[]
 }
 
 model Account {
