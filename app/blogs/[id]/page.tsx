@@ -18,7 +18,10 @@ const BlogDetailPage = async (props: Props) => {
   const params = await props.params;
   const blog = await prisma.blog.findUnique({
     where: { id: parseInt(params.id) },
-    include: { user: true },
+    include: {
+      user: true,
+      comments: true,
+    },
   });
 
   if (!blog) return notFound();
@@ -44,7 +47,7 @@ const BlogDetailPage = async (props: Props) => {
           </Flex>
         )}
         <BlogViewer className="mt-7" content={blog.content} />
-        <Comments blogId={blog.id} />
+        <Comments blog={blog} />
       </Box>
     </Box>
   );

@@ -4,17 +4,18 @@ import { commentSchema } from "@/app/validationSchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { User } from "@prisma/client";
 import { Form, FormField } from "@radix-ui/react-form";
-import { Callout, Flex, TextArea } from "@radix-ui/themes";
+import { Callout, Flex, TextArea, Text } from "@radix-ui/themes";
 import { useSession } from "next-auth/react";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { BiInfoCircle, BiSend } from "react-icons/bi";
 import { z } from "zod";
 import UserHandle from "../_components/UserHandle";
+import Link from "next/link";
 
 export type CommentFormData = z.infer<typeof commentSchema>;
 
-const CommentBox = ({ blogId }: { blogId: number }) => {
+const CommentForm = ({ blogId }: { blogId: number }) => {
   const { data: session } = useSession();
   const [error, setError] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
@@ -41,7 +42,7 @@ const CommentBox = ({ blogId }: { blogId: number }) => {
           <Callout.Text color="red">{error}</Callout.Text>
         </Callout.Root>
       )}
-      {session && session.user && (
+      {session && session.user ? (
         <div>
           <UserHandle user={session.user as User} />
           <Form onSubmit={handleSubmit(onSubmit)}>
@@ -59,9 +60,13 @@ const CommentBox = ({ blogId }: { blogId: number }) => {
             </Flex>
           </Form>
         </div>
+      ) : (
+        <Link href="/auth/signin" className="border-b-2 border-zinc-700">
+          Log In to Comment
+        </Link>
       )}
     </div>
   );
 };
 
-export default CommentBox;
+export default CommentForm;

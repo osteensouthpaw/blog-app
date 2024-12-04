@@ -1,11 +1,21 @@
 import { Box, Text } from "@radix-ui/themes";
-import CommentBox from "./CommentBox";
+import CommentForm from "./CommentForm";
+import { Blog } from "@prisma/client";
+import CommentCard from "./CommentCard";
 
-const Comments = ({ blogId }: { blogId: number }) => {
+const Comments = async ({ blog }: { blog: Blog }) => {
   return (
     <Box className="mt-8 max-w-xl space-y-3">
       <Text className="font-semibold text-xl">Comments</Text>
-      <CommentBox blogId={blogId} />
+      <CommentForm blogId={blog.id} />
+      <div className="space-y-5">
+        <CommentCard />
+        <CommentCard />
+        <CommentCard />
+        <CommentCard />
+        <CommentCard />
+        <CommentCard />
+      </div>
     </Box>
   );
 };

@@ -1,5 +1,5 @@
 "use server";
-import { CommentFormData } from "@/app/blogs/[id]/CommentBox";
+import { CommentFormData } from "@/app/blogs/[id]/CommentForm";
 import { commentSchema } from "@/app/validationSchemas";
 import { auth } from "@/auth";
 import prisma from "@/prisma/client";
