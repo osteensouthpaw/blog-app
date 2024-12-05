@@ -16,7 +16,7 @@ const Comments = async ({ blog }: { blog: Blog }) => {
         Comments ({comments.length})
       </Text>
       <CommentForm blogId={blog.id} />
-      <Box className="space-y-5">
+      <Box className="space-y-5 max-w-3xl">
         {comments.map((comment) => (
           <CommentCard key={comment.id} comment={comment} />
         ))}

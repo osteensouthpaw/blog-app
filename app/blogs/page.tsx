@@ -13,6 +13,7 @@ const BlogsPage = async ({ searchParams }: Props) => {
     where: {
       categoryId: parseInt(categoryId) || undefined,
     },
+    orderBy: { createdAt: "desc" },
   });
   const categories = await prisma.category.findMany();
 
