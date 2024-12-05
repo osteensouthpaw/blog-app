@@ -1,4 +1,4 @@
-import { Container, Theme } from "@radix-ui/themes";
+import { Container, Flex, Theme } from "@radix-ui/themes";
 import "@radix-ui/themes/styles.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
@@ -6,6 +6,7 @@ import "./globals.css";
 import NavBar from "./NavBar";
 import "./theme-config.css";
 import AuthProvider from "./auth/AuthProvider";
+import Footer from "@/Footer";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -25,13 +26,16 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.variable}>
+      <body className={`${inter.variable} `}>
         <AuthProvider>
           <Theme accentColor="jade">
             <NavBar />
-            <main className="p-6">
-              <Container>{children}</Container>
-            </main>
+            <Flex direction="column" className="min-h-svh">
+              <main className="p-6 flex-grow">
+                <Container>{children}</Container>
+              </main>
+              <Footer />
+            </Flex>
           </Theme>
         </AuthProvider>
       </body>
