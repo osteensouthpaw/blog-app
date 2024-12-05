@@ -3,7 +3,6 @@
 import { UserUpdateFormData } from "@/app/users/[id]/edit/UserEditForm";
 import { userUpdateSchema } from "@/app/validationSchemas";
 import prisma from "@/prisma/client";
-import { revalidatePath } from "next/cache";
 
 export const updateUser = async (
   formData: UserUpdateFormData,

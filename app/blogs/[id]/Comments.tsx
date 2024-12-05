@@ -1,8 +1,8 @@
-import { Box, Text } from "@radix-ui/themes";
-import CommentForm from "./CommentForm";
-import { Blog } from "@prisma/client";
 import prisma from "@/prisma/client";
+import { Blog } from "@prisma/client";
+import { Box, Text } from "@radix-ui/themes";
 import CommentCard from "./CommentCard";
+import CommentForm from "./CommentForm";
 
 const Comments = async ({ blog }: { blog: Blog }) => {
   const comments = await prisma.comment.findMany({
