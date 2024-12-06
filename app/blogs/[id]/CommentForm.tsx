@@ -20,9 +20,15 @@ interface Props {
   blogId: number;
   comment?: Comment;
   onCancelEdit?: () => void;
+  onSubmitUpdate?: () => void;
 }
 
-const CommentForm = ({ blogId, comment }: Props) => {
+const CommentForm = ({
+  blogId,
+  comment,
+  onCancelEdit,
+  onSubmitUpdate,
+}: Props) => {
   const { data: session } = useSession();
   const [error, setError] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
@@ -39,6 +45,7 @@ const CommentForm = ({ blogId, comment }: Props) => {
         setError(res?.error);
       });
     });
+    if (onSubmitUpdate) onSubmitUpdate();
     reset();
   };
 
@@ -65,9 +72,26 @@ const CommentForm = ({ blogId, comment }: Props) => {
                   placeholder="Reply to comment…"
                 />
               </FormField>
-              <button type="submit" disabled={isPending}>
-                <BiSend size={25} />
-              </button>
+              <Flex align="center" gap="4">
+                <Button
+                  variant="ghost"
+                  type="submit"
+                  radius="full"
+                  disabled={isPending}
+                >
+                  <BiSend size={25} />
+                </Button>
+                {onCancelEdit && (
+                  <Button
+                    variant="soft"
+                    color="gray"
+                    radius="full"
+                    onClick={onCancelEdit}
+                  >
+                    Cancel
+                  </Button>
+                )}
+              </Flex>
             </Flex>
           </Form>
         </div>

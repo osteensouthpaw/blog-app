@@ -21,6 +21,10 @@ const CommentCard = ({ comment, user }: Props) => {
     setOnEditComment(false);
   };
 
+  const submitUpdate = () => {
+    setOnEditComment(false);
+  };
+
   return (
     <Box className="space-y-2 border-b pb-2">
       {editComment ? (
@@ -28,6 +32,7 @@ const CommentCard = ({ comment, user }: Props) => {
           blogId={comment.blogId}
           comment={comment}
           onCancelEdit={cancelEdit}
+          onSubmitUpdate={submitUpdate}
         />
       ) : (
         <>
