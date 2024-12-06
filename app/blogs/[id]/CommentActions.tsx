@@ -5,9 +5,15 @@ import { useState, useTransition } from "react";
 import { BiPencil, BiTrash } from "react-icons/bi";
 import { FaEllipsis } from "react-icons/fa6";
 
-const CommentActions = ({ commentId }: { commentId: number }) => {
+interface Props {
+  commentId: number;
+  onEditComment: () => void;
+}
+
+const CommentActions = ({ commentId, onEditComment }: Props) => {
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | undefined>();
+
   const onDeleteComment = () => {
     startTransition(() => {
       deleteComment(commentId).then((data) => {
@@ -27,7 +33,9 @@ const CommentActions = ({ commentId }: { commentId: number }) => {
         <DropdownMenu.Item>
           <Flex gap="4" align="baseline" justify="between">
             <BiPencil size={15} />
-            <button className="text-zinc-600">Edit</button>
+            <button className="text-zinc-600" onClick={onEditComment}>
+              Edit
+            </button>
           </Flex>
         </DropdownMenu.Item>
         <DropdownMenu.Item>

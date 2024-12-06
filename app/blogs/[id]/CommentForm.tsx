@@ -1,21 +1,28 @@
 "use client";
 import { createComment } from "@/actions/createComment";
+import { updateComment } from "@/actions/updateComment";
 import { commentSchema } from "@/app/validationSchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { User } from "@prisma/client";
+import { Comment, User } from "@prisma/client";
 import { Form, FormField } from "@radix-ui/react-form";
-import { Callout, Flex, TextArea, Text } from "@radix-ui/themes";
+import { Button, Callout, Flex, TextArea } from "@radix-ui/themes";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { BiInfoCircle, BiSend } from "react-icons/bi";
 import { z } from "zod";
 import UserHandle from "../_components/UserHandle";
-import Link from "next/link";
 
 export type CommentFormData = z.infer<typeof commentSchema>;
 
-const CommentForm = ({ blogId }: { blogId: number }) => {
+interface Props {
+  blogId: number;
+  comment?: Comment;
+  onCancelEdit?: () => void;
+}
+
+const CommentForm = ({ blogId, comment }: Props) => {
   const { data: session } = useSession();
   const [error, setError] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
@@ -24,9 +31,12 @@ const CommentForm = ({ blogId }: { blogId: number }) => {
   });
 
   const onSubmit = (data: CommentFormData) => {
+    const result = comment
+      ? updateComment(comment, data)
+      : createComment(data, blogId);
     startTransition(() => {
-      createComment(data, blogId).then((data) => {
-        setError(data?.error);
+      result.then((res) => {
+        setError(res?.error);
       });
     });
     reset();
@@ -49,6 +59,7 @@ const CommentForm = ({ blogId }: { blogId: number }) => {
             <Flex gap="4">
               <FormField name="comment" className="space-y-2 flex-1">
                 <TextArea
+                  defaultValue={comment?.content}
                   {...register("content")}
                   size="2"
                   placeholder="Reply to comment…"

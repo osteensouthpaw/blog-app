@@ -1,7 +1,7 @@
 import prisma from "@/prisma/client";
 import { Blog } from "@prisma/client";
 import { Box, Text } from "@radix-ui/themes";
-import CommentCard from "./CommentCard";
+import CommentCardWrapper from "./CommentCardWrapper";
 import CommentForm from "./CommentForm";
 
 const Comments = async ({ blog }: { blog: Blog }) => {
@@ -18,7 +18,7 @@ const Comments = async ({ blog }: { blog: Blog }) => {
       <CommentForm blogId={blog.id} />
       <Box className="space-y-5 max-w-3xl">
         {comments.map((comment) => (
-          <CommentCard key={comment.id} comment={comment} />
+          <CommentCardWrapper key={comment.id} comment={comment} />
         ))}
       </Box>
     </Box>

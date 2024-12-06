@@ -15,13 +15,14 @@ export const createComment = async (
 
   const { content } = validation.data;
   try {
-    await prisma.comment.create({
+    const createdComment = await prisma.comment.create({
       data: {
         content,
         userId: session.user!.id!,
         blogId,
       },
     });
+    return { data: createdComment };
   } catch (error) {
     console.log(error);
     return { error: "An error occured! Please try again" };
