@@ -1,10 +1,11 @@
 "use client";
 import { Comment, User } from "@prisma/client";
 import { Box, Flex, Text } from "@radix-ui/themes";
+import { useState } from "react";
 import UserHandle from "../_components/UserHandle";
 import CommentActions from "./CommentActions";
 import CommentForm from "./CommentForm";
-import { useState } from "react";
+
 interface Props {
   comment: Comment;
   user: User;
@@ -38,7 +39,11 @@ const CommentCard = ({ comment, user }: Props) => {
         <>
           <Flex justify="between" align="center">
             <UserHandle user={user} date={comment.createdAt} />
-            <CommentActions onEditComment={onEdit} commentId={comment.id} />
+            <CommentActions
+              onEditComment={onEdit}
+              user={user}
+              commentId={comment.id}
+            />
           </Flex>
           <Text className="text-zinc-700 block text-sm">{comment.content}</Text>
         </>

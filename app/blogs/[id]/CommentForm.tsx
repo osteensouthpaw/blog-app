@@ -63,7 +63,7 @@ const CommentForm = ({
         <div>
           <UserHandle user={session.user as User} />
           <Form onSubmit={handleSubmit(onSubmit)}>
-            <Flex gap="4">
+            <Flex gap="4" className={`${comment && "flex-col md:flex-row"}`}>
               <FormField name="comment" className="space-y-2 flex-1">
                 <TextArea
                   defaultValue={comment?.content}
