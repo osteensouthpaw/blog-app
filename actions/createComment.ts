@@ -3,6 +3,7 @@ import { CommentFormData } from "@/app/blogs/[id]/CommentForm";
 import { commentSchema } from "@/app/validationSchemas";
 import { auth } from "@/auth";
 import prisma from "@/prisma/client";
+import { revalidatePath } from "next/cache";
 
 export const createComment = async (
   formData: CommentFormData,
@@ -22,6 +23,7 @@ export const createComment = async (
         blogId,
       },
     });
+    revalidatePath(`/blogs/${blogId}`);
     return { data: createdComment };
   } catch (error) {
     console.log(error);

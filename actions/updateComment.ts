@@ -4,6 +4,7 @@ import { CommentFormData } from "@/app/blogs/[id]/CommentForm";
 import { commentSchema } from "@/app/validationSchemas";
 import prisma from "@/prisma/client";
 import { Comment } from "@prisma/client";
+import { revalidatePath } from "next/cache";
 
 export const updateComment = async (
   comment: Comment,
@@ -25,6 +26,7 @@ export const updateComment = async (
       where: { id: commentToUpdate.id },
       data: { content },
     });
+    revalidatePath(`/blogs/${comment.blogId}`);
     return { data: updatedComment };
   } catch (error) {
     console.error(error);

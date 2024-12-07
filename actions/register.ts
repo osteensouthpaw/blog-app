@@ -3,7 +3,9 @@
 import { RegistrationFormData } from "@/app/auth/register/page";
 import { registrationSchema } from "@/app/validationSchemas";
 import prisma from "@/prisma/client";
+import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import bcrypt from "bcrypt";
+import { revalidatePath } from "next/cache";
 
 export const register = async (values: RegistrationFormData) => {
   const validation = registrationSchema.safeParse(values);
@@ -27,5 +29,6 @@ export const register = async (values: RegistrationFormData) => {
     },
   });
 
+  revalidatePath(DEFAULT_LOGIN_REDIRECT);
   return { success: "Successful" };
 };

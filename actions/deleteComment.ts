@@ -1,6 +1,7 @@
 "use server";
 
 import prisma from "@/prisma/client";
+import { revalidatePath } from "next/cache";
 
 export const deleteComment = async (commentId: number) => {
   const comment = await prisma.comment.findUnique({
@@ -13,6 +14,7 @@ export const deleteComment = async (commentId: number) => {
     await prisma.comment.delete({
       where: { id: comment.id },
     });
+    revalidatePath(`/blogs/${comment.blogId}`);
   } catch (error) {
     console.error(error);
   }
