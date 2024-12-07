@@ -5,6 +5,7 @@ import { loginSchema } from "@/app/validationSchemas";
 import { signIn } from "@/auth";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { AuthError } from "next-auth";
+import { revalidatePath } from "next/cache";
 
 export const login = async (values: SignInFormData) => {
   const validation = loginSchema.safeParse(values);
@@ -32,4 +33,6 @@ export const login = async (values: SignInFormData) => {
 
     throw error;
   }
+
+  revalidatePath(DEFAULT_LOGIN_REDIRECT);
 };
