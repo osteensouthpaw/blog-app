@@ -11,7 +11,7 @@ export const createComment = async (
 ) => {
   const session = await auth();
   const validation = commentSchema.safeParse(formData);
-  if (!session) return { error: "Login to comment" };
+  if (!session || !session.user) return { error: "Login to comment" };
   if (!validation.success) return { error: "Invalid Data" };
 
   const { content } = validation.data;
@@ -19,7 +19,7 @@ export const createComment = async (
     const createdComment = await prisma.comment.create({
       data: {
         content,
-        userId: session.user!.id!,
+        userId: session.user.id!,
         blogId,
       },
     });

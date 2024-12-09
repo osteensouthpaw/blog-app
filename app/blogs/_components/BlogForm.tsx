@@ -60,9 +60,10 @@ const BlogForm = ({ blog, categories }: Props) => {
       <form className=" space-y-5" onSubmit={onSubmit}>
         <CategoryDropDown
           defaultValue={blog?.categoryId}
-          register={register}
+          control={control}
           categories={categories}
         />
+        <ErrorMessage>{errors.categoryId?.message}</ErrorMessage>
         <TextField.Root
           defaultValue={blog?.title}
           placeholder="Title"

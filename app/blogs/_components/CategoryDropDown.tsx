@@ -1,32 +1,39 @@
 import { Category } from "@prisma/client";
 import { Select } from "@radix-ui/themes";
-import { UseFormRegister } from "react-hook-form";
+import { Control, Controller } from "react-hook-form";
 import { BlogFormData } from "./BlogForm";
 
 interface Props {
   categories: Category[];
-  register: UseFormRegister<BlogFormData>;
+  control: Control<BlogFormData>;
   defaultValue: number | undefined;
 }
 
-const CategoryDropDown = ({ categories, register, defaultValue }: Props) => {
+const CategoryDropDown = ({ categories, control, defaultValue }: Props) => {
   return (
-    <Select.Root
+    <Controller
       defaultValue={defaultValue?.toString() || "category"}
-      {...register("category")}
-    >
-      <Select.Trigger />
-      <Select.Content>
-        <Select.Item value="category" disabled>
-          Select Category
-        </Select.Item>
-        {categories.map((category) => (
-          <Select.Item key={category.id} value={category.id.toString()}>
-            {category.name}
-          </Select.Item>
-        ))}
-      </Select.Content>
-    </Select.Root>
+      name="categoryId"
+      control={control}
+      render={({ field }) => (
+        <Select.Root
+          value={field.value?.toString() || "category"}
+          onValueChange={(value) => field.onChange(value)}
+        >
+          <Select.Trigger />
+          <Select.Content>
+            <Select.Item value="category" disabled>
+              Select Category
+            </Select.Item>
+            {categories.map((category) => (
+              <Select.Item key={category.id} value={category.id.toString()}>
+                {category.name}
+              </Select.Item>
+            ))}
+          </Select.Content>
+        </Select.Root>
+      )}
+    />
   );
 };
 

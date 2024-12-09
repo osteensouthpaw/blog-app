@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const createBlogSchema = z.object({
-  category: z.string(),
+  categoryId: z.string({ message: "category is cannot be empty" }),
   title: z
     .string()
     .max(255)
@@ -22,6 +22,7 @@ export const patchBlogSchema = z.object({
     .min(3, { message: "content cannot be less that 3 characters" })
     .optional(),
 });
+
 export const loginSchema = z.object({
   email: z.string().email().max(255),
   password: z.string().min(5),
