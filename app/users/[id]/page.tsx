@@ -16,7 +16,7 @@ import { notFound } from "next/navigation";
 import { BiBookContent, BiRightArrowAlt } from "react-icons/bi";
 import { RxAvatar } from "react-icons/rx";
 
-const UserProfilePage = async () => {
+const UserPage = async () => {
   const session = await auth();
   if (!session || !session.user) return null;
 
@@ -139,4 +139,4 @@ const UserProfilePage = async () => {
   );
 };
 
-export default UserProfilePage;
+export default UserPage;
