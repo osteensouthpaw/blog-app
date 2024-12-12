@@ -15,6 +15,7 @@ import NextLink from "next/link";
 import { notFound } from "next/navigation";
 import { BiBookContent, BiRightArrowAlt } from "react-icons/bi";
 import { RxAvatar } from "react-icons/rx";
+import LatestBlogs from "../LatestBlogs";
 
 const UserPage = async () => {
   const session = await auth();
@@ -59,44 +60,7 @@ const UserPage = async () => {
         </Card>
       </Box>
 
-      <Box className="space-y-5">
-        <Flex align="baseline">
-          <Heading className="flex-1">
-            Latest Publications ({user.blogs.length})
-          </Heading>
-          <Link href="#" color="gray">
-            <Flex align="center" gap="2">
-              <Text className="text-sm">View All</Text>
-              <BiRightArrowAlt />
-            </Flex>
-          </Link>
-        </Flex>
-        <Card className="p-7 space-y-7">
-          <Flex gap="5" direction="column">
-            {user.blogs.map((blog) => (
-              <Box key={blog.id} className="space-y-2">
-                <NextLink
-                  href={`/blogs/${blog.id}`}
-                  className="font-semibold hover:border-b"
-                >
-                  {blog.title}
-                </NextLink>
-                <BlogViewer
-                  className="border-b text-zinc-500"
-                  content={blog.content
-                    .split(" ")
-                    .slice(0, 20)
-                    .join(" ")
-                    .concat("...")}
-                />
-              </Box>
-            ))}
-          </Flex>
-          <NextLink href="/blogs/new" className="block">
-            <Button className="font-semibold">Create New Blog</Button>
-          </NextLink>
-        </Card>
-      </Box>
+      <LatestBlogs user={user} blogs={user.blogs} />
 
       <Box className="space-y-5">
         <Flex align="baseline">

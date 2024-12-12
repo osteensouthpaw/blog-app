@@ -1,9 +1,11 @@
 import { auth } from "@/auth";
 import prisma from "@/prisma/client";
 import { Avatar, Box, Button, Flex, Link, Tabs, Text } from "@radix-ui/themes";
+import { notFound } from "next/navigation";
 import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
 import { MdOutlineMailOutline } from "react-icons/md";
 import { RxAvatar } from "react-icons/rx";
+import LatestBlogs from "../../LatestBlogs";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -16,9 +18,10 @@ const UserProfilePage = async ({ params }: Props) => {
   const id = (await params).id;
   const user = await prisma.user.findUnique({
     where: { id },
+    include: { blogs: true },
   });
 
-  //   if (!user) return notFound();
+  if (!user) return notFound();
 
   return (
     <Box className="space-y-12 max-w-4xl mx-auto">
@@ -26,7 +29,7 @@ const UserProfilePage = async ({ params }: Props) => {
         <Flex gap="4" className="flex-1">
           <Avatar src="" radius="full" size="5" fallback={<RxAvatar />} />
           <Flex gap="1" direction="column">
-            <Text className="font-semibold text-lg">John Osteen</Text>
+            <Text className="font-semibold text-lg">{user.name}</Text>
             <Text className="text-zinc-600 text-sm">43k Followers</Text>
           </Flex>
         </Flex>
@@ -40,16 +43,15 @@ const UserProfilePage = async ({ params }: Props) => {
             <Tabs.Trigger value="tab1">Home</Tabs.Trigger>
             <Tabs.Trigger value="tab2">About</Tabs.Trigger>
           </Tabs.List>
-          <Tabs.Content value="tab1">Tab one content</Tabs.Content>
+          <Tabs.Content value="tab1" className="my-8">
+            <LatestBlogs user={user} blogs={user.blogs} />
+          </Tabs.Content>
           <Tabs.Content value="tab2">
             <Box className="space-y-4">
               <Text as="p" className="text-zinc-600 py-6 border-b">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab
-                nobis, saepe blanditiis dolore alias ipsam odit hic, vel odio
-                animi velit voluptates maxime? Laudantium necessitatibus
-                aspernatur, culpa sequi minima doloremque?
+                {user.bio}
               </Text>
-              <Text as="p">Member since {new Date().toDateString()}</Text>
+              <Text as="p">Member since {user.createdAt.toDateString()}</Text>
               <Box className="space-y-8">
                 <Flex gap="4" className="text-sm">
                   <Link>43k Followers</Link>
