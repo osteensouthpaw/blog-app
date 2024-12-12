@@ -3,13 +3,12 @@ import prisma from "@/prisma/client";
 import { Box, Button, Flex, Heading, Text } from "@radix-ui/themes";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { BiComment, BiLike } from "react-icons/bi";
 import { RxPencil2 } from "react-icons/rx";
 import BlogViewer from "../_components/BlogViewer";
 import UserHandle from "../_components/UserHandle";
 import Comments from "./Comments";
 import DeleteBlogButton from "./DeleteBlogButton";
-import { BiComment, BiCommentCheck, BiLike } from "react-icons/bi";
-import { FcComments, FcDislike, FcLike } from "react-icons/fc";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -23,7 +22,12 @@ const BlogDetailPage = async (props: Props) => {
     include: {
       user: true,
       comments: true,
+      likes: true,
     },
+  });
+
+  const blogLikes = await prisma.blogLike.count({
+    where: { blogId: parseInt(params.id) },
   });
 
   if (!blog) return notFound();
@@ -51,11 +55,11 @@ const BlogDetailPage = async (props: Props) => {
         <Flex className="border-y p-2 text-zinc-500 mt-5" gap="9">
           <Flex gap="2" align="center">
             <BiComment size={20} />
-            <Text>23k</Text>
+            <Text>{blog.comments.length}</Text>
           </Flex>
           <Flex gap="2" align="center">
             <BiLike size={20} />
-            <Text>23k</Text>
+            <Text>{blog.likes.length}</Text>
           </Flex>
         </Flex>
         <BlogViewer className="mt-7" content={blog.content} />
