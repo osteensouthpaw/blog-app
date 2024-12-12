@@ -8,6 +8,8 @@ import BlogViewer from "../_components/BlogViewer";
 import UserHandle from "../_components/UserHandle";
 import Comments from "./Comments";
 import DeleteBlogButton from "./DeleteBlogButton";
+import { BiComment, BiCommentCheck, BiLike } from "react-icons/bi";
+import { FcComments, FcDislike, FcLike } from "react-icons/fc";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -46,6 +48,16 @@ const BlogDetailPage = async (props: Props) => {
             <DeleteBlogButton issueId={blog.id} />
           </Flex>
         )}
+        <Flex className="border-y p-2 text-zinc-500 mt-5" gap="9">
+          <Flex gap="2" align="center">
+            <BiComment size={20} />
+            <Text>23k</Text>
+          </Flex>
+          <Flex gap="2" align="center">
+            <BiLike size={20} />
+            <Text>23k</Text>
+          </Flex>
+        </Flex>
         <BlogViewer className="mt-7" content={blog.content} />
         <Comments blog={blog} />
       </Box>
