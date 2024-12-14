@@ -3,7 +3,6 @@ import prisma from "@/prisma/client";
 import { Box, Button, Flex, Heading, Text } from "@radix-ui/themes";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { BiComment, BiLike } from "react-icons/bi";
 import { RxPencil2 } from "react-icons/rx";
 import BlogViewer from "../_components/BlogViewer";
 import UserHandle from "../_components/UserHandle";

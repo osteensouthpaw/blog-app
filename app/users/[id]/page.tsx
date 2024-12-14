@@ -15,7 +15,8 @@ import NextLink from "next/link";
 import { notFound } from "next/navigation";
 import { BiBookContent, BiRightArrowAlt } from "react-icons/bi";
 import { RxAvatar } from "react-icons/rx";
-import LatestBlogs from "../LatestBlogs";
+import LatestBlogs from "../_components/LatestBlogs";
+import LikedPosts from "../_components/LikedPosts";
 
 const UserPage = async () => {
   const session = await auth();
@@ -99,6 +100,7 @@ const UserPage = async () => {
           )}
         </Card>
       </Box>
+      <LikedPosts userId={user.id} />
     </Box>
   );
 };

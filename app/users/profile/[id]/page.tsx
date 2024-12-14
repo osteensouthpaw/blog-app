@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
 import { MdOutlineMailOutline } from "react-icons/md";
 import { RxAvatar } from "react-icons/rx";
-import LatestBlogs from "../../LatestBlogs";
+import LatestBlogs from "../../_components/LatestBlogs";
 
 interface Props {
   params: Promise<{ id: string }>;

@@ -3,7 +3,7 @@ import { Box, Flex, Heading, Card, Button, Text, Link } from "@radix-ui/themes";
 import NextLink from "next/link";
 import React from "react";
 import { BiRightArrowAlt } from "react-icons/bi";
-import BlogViewer from "../blogs/_components/BlogViewer";
+import BlogViewer from "../../blogs/_components/BlogViewer";
 import { Blog, User } from "@prisma/client";
 import { useSession } from "next-auth/react";
 
