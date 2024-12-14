@@ -9,6 +9,7 @@ import BlogViewer from "../_components/BlogViewer";
 import UserHandle from "../_components/UserHandle";
 import Comments from "./Comments";
 import DeleteBlogButton from "./DeleteBlogButton";
+import UserReaction from "./UserReaction";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -24,10 +25,6 @@ const BlogDetailPage = async (props: Props) => {
       comments: true,
       likes: true,
     },
-  });
-
-  const blogLikes = await prisma.blogLike.count({
-    where: { blogId: parseInt(params.id) },
   });
 
   if (!blog) return notFound();
@@ -52,16 +49,11 @@ const BlogDetailPage = async (props: Props) => {
             <DeleteBlogButton issueId={blog.id} />
           </Flex>
         )}
-        <Flex className="border-y p-2 text-zinc-500 mt-5" gap="9">
-          <Flex gap="2" align="center">
-            <BiComment size={20} />
-            <Text>{blog.comments.length}</Text>
-          </Flex>
-          <Flex gap="2" align="center">
-            <BiLike size={20} />
-            <Text>{blog.likes.length}</Text>
-          </Flex>
-        </Flex>
+        <UserReaction
+          blogId={blog.id}
+          totalComments={blog.comments.length}
+          totalLikes={blog.likes.length}
+        />
         <BlogViewer className="mt-7" content={blog.content} />
         <Comments blog={blog} />
       </Box>
