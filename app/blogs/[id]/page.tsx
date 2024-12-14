@@ -29,7 +29,14 @@ const BlogDetailPage = async (props: Props) => {
 
   if (!blog) return notFound();
 
-  const isBlogOwner = session && session.user?.id == blog.userId;
+  const isBlogOwner = session && session.user?.id === blog.userId;
+
+  const isLikedByUser = await prisma.blogLike.findFirst({
+    where: {
+      blogId: blog.id,
+      userId: session!.user!.id,
+    },
+  });
 
   return (
     <Box>
@@ -50,6 +57,7 @@ const BlogDetailPage = async (props: Props) => {
           </Flex>
         )}
         <UserReaction
+          isLikedByUser={!!isLikedByUser}
           blogId={blog.id}
           totalComments={blog.comments.length}
           totalLikes={blog.likes.length}

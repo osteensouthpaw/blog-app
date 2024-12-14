@@ -12,44 +12,27 @@ export const toggleBlogLike = async (blogId: number) => {
   if (!session || !session.user || !session.user.id)
     return redirect("/auth/signin");
 
-  const isLiked = await prisma.blogLike.count({
-    where: { blogId, userId: session.user.id },
+  const userId = session.user.id;
+  const isLiked = await prisma.blogLike.findFirst({
+    where: { blogId, userId },
   });
 
-  return isLiked
-    ? await unlikePost(blogId, session.user.id)
-    : await likePost(blogId, session.user.id);
-};
-
-const unlikePost = async (blogId: number, userId: string) => {
   try {
-    return await prisma.blogLike.delete({
-      where: {
-        userId_blogId: {
-          blogId,
-          userId,
+    if (isLiked) {
+      await prisma.blogLike.delete({
+        where: {
+          userId_blogId: { blogId, userId },
         },
-      },
-    });
+      });
+    } else {
+      await prisma.blogLike.create({
+        data: { blogId, userId },
+      });
+    }
+    return { isLiked: !!isLiked };
   } catch (error) {
     console.log(error);
-    return { error: "Something went wrong! Please try again" };
-  } finally {
-    revalidatePath(`/blogs/${blogId}`);
-  }
-};
-
-const likePost = async (blogId: number, userId: string) => {
-  try {
-    return await prisma.blogLike.create({
-      data: {
-        blogId,
-        userId,
-      },
-    });
-  } catch (error) {
-    console.log(error);
-    return { error: "Something went wrong! Please try again" };
+    return { error: "An error occured" };
   } finally {
     revalidatePath(`/blogs/${blogId}`);
   }
