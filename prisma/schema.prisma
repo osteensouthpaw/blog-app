@@ -26,6 +26,16 @@ model Blog {
   category    Category?  @relation(fields: [categoryId], references: [id])
   comments    Comment[]
   likes       BlogLike[]
+  bookmarks   Bookmark[]
+}
+
+model Bookmark {
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  blog   Blog   @relation(fields: [blogId], references: [id], onDelete: Cascade)
+  userId String
+  blogId Int
+
+  @@id([userId, blogId])
 }
 
 model BlogLike {
@@ -70,6 +80,7 @@ model User {
   blogs         Blog[]
   Comments      Comment[]
   BlogLikes     BlogLike[]
+  Bookmark      Bookmark[]
 }
 
 model Account {
