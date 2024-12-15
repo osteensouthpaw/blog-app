@@ -23,6 +23,7 @@ const BlogDetailPage = async (props: Props) => {
       user: true,
       comments: true,
       likes: true,
+      bookmarks: true,
     },
   });
 
@@ -31,6 +32,13 @@ const BlogDetailPage = async (props: Props) => {
   const isBlogOwner = session && session.user?.id === blog.userId;
 
   const isLikedByUser = await prisma.blogLike.findFirst({
+    where: {
+      blogId: blog.id,
+      userId: session!.user!.id,
+    },
+  });
+
+  const isBookmarked = await prisma.bookmark.findFirst({
     where: {
       blogId: blog.id,
       userId: session!.user!.id,
@@ -56,10 +64,12 @@ const BlogDetailPage = async (props: Props) => {
           </Flex>
         )}
         <UserReaction
+          isBookmarked={!!isBookmarked}
           isLikedByUser={!!isLikedByUser}
           blogId={blog.id}
           totalComments={blog.comments.length}
           totalLikes={blog.likes.length}
+          totalBookmarks={blog.bookmarks.length}
         />
         <BlogViewer className="mt-7" content={blog.content} />
         <Comments blog={blog} />

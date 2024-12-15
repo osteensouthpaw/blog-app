@@ -5,32 +5,33 @@ import prisma from "@/prisma/client";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-export const toggleBlogLike = async (blogId: number) => {
-  if (!blogId) throw new Error("Post id must be provided");
-  const session = await auth();
+export const toggleBookmark = async (blogId: number) => {
+  if (!blogId) throw new Error("blogId must be provided");
 
+  const session = await auth();
   if (!session || !session.user || !session.user.id)
     return redirect("/auth/signin");
 
   const userId = session.user.id;
-  const isLiked = await prisma.blogLike.findFirst({
-    where: { blogId, userId },
+
+  const isBookmarkPresent = await prisma.bookmark.findFirst({
+    where: { userId, blogId },
   });
 
   try {
-    if (isLiked) {
-      await prisma.blogLike.delete({
+    if (isBookmarkPresent) {
+      await prisma.bookmark.delete({
         where: {
           userId_blogId: { blogId, userId },
         },
       });
     } else {
-      await prisma.blogLike.create({
+      await prisma.bookmark.create({
         data: { blogId, userId },
       });
     }
   } catch (error) {
-    console.log(error);
+    console.log({ error });
   } finally {
     revalidatePath(`/blogs/${blogId}`);
   }
