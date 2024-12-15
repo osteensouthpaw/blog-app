@@ -52,11 +52,11 @@ const CommentForm = ({
   return (
     <div className="max-w-xl">
       {error && (
-        <Callout.Root>
+        <Callout.Root color="red">
           <Callout.Icon>
             <BiInfoCircle />
           </Callout.Icon>
-          <Callout.Text color="red">{error}</Callout.Text>
+          <Callout.Text>{error}</Callout.Text>
         </Callout.Root>
       )}
       {session && session.user ? (

@@ -14,17 +14,11 @@ interface Props {
 const CommentCard = ({ comment, user }: Props) => {
   const [editComment, setOnEditComment] = useState(false);
 
-  const onEdit = () => {
-    setOnEditComment(true);
-  };
+  const onEdit = () => setOnEditComment(true);
 
-  const cancelEdit = () => {
-    setOnEditComment(false);
-  };
+  const cancelEdit = () => setOnEditComment(false);
 
-  const submitUpdate = () => {
-    setOnEditComment(false);
-  };
+  const submitUpdate = () => setOnEditComment(false);
 
   return (
     <Box className="space-y-2 border-b pb-2">
@@ -38,7 +32,11 @@ const CommentCard = ({ comment, user }: Props) => {
       ) : (
         <>
           <Flex justify="between" align="center">
-            <UserHandle user={user} date={comment.createdAt} />
+            <UserHandle
+              user={user}
+              createdDate={comment.createdAt}
+              editedDate={comment.updatedAt}
+            />
             <CommentActions
               onEditComment={onEdit}
               user={user}

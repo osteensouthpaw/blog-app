@@ -6,10 +6,11 @@ import { RxAvatar } from "react-icons/rx";
 
 interface Props {
   user: User;
-  date?: Date;
+  createdDate?: Date;
+  editedDate?: Date;
 }
 
-const UserHandle = ({ user, date: date }: Props) => {
+const UserHandle = ({ user, createdDate, editedDate }: Props) => {
   return (
     <Link href={`/users/profile/${user.id}`}>
       <Flex gap="3" p="2" align="center">
@@ -21,8 +22,12 @@ const UserHandle = ({ user, date: date }: Props) => {
         />
         <Flex direction="column">
           <Text className="font-semibold text-sm">{user.name}</Text>
-          {date && (
-            <Text className="text-xs text-zinc-500">{date.toDateString()}</Text>
+          {createdDate && (
+            <Text className="text-xs text-zinc-500">
+              {createdDate.toString() !== editedDate?.toString()
+                ? `${editedDate?.toDateString()} (edited)`
+                : `${createdDate.toDateString()}`}
+            </Text>
           )}
         </Flex>
       </Flex>
