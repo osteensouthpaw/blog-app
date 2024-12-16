@@ -78,9 +78,20 @@ model User {
   createdAt     DateTime   @default(now())
   updatedAt     DateTime   @updatedAt
   blogs         Blog[]
-  Comments      Comment[]
-  BlogLikes     BlogLike[]
-  Bookmark      Bookmark[]
+  comments      Comment[]
+  blogLikes     BlogLike[]
+  bookmark      Bookmark[]
+  followers     Follower[] @relation("followers")
+  following     Follower[] @relation("followings")
+}
+
+model Follower {
+  follower    User   @relation("followers", fields: [followerId], references: [id])
+  following   User   @relation("followings", fields: [followingId], references: [id])
+  followerId  String
+  followingId String
+
+  @@id([followerId, followingId])
 }
 
 model Account {
